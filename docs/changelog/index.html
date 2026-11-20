@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duo Clone Changelog – Release Notes 0.1.19 to 0.1.24</title>
+<meta name="description" content="Release notes for Duo Clone versions 0.1.19 to 0.1.24: new color theme and icon, fixes for typing, browsers, camera and permission notices inside clones.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/changelog/">
+<link rel="icon" type="image/png" href="../assets/favicon-64.png">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../assets/icon-192.png" width="40" height="40" alt="">Duo Clone</a>
+    <nav aria-label="Main">
+      <a href="../">Home</a>
+      <a href="./" aria-current="page">Changelog</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Changelog</h1>
+  <p class="lede">What changed in each version of Duo Clone, newest first. Dates are in GMT+7.</p>
+
+  <section class="release" aria-labelledby="v0-1-24">
+    <h2 id="v0-1-24">Version 0.1.24 (build 27)</h2>
+    <p class="meta">20 November 2026</p>
+    <ul>
+      <li>The app now follows the Duo Clone look: paper and ink surfaces with green and pink accents. The Duo Clone mark and name appear in the header, the consent screen, About and the opening screen.</li>
+      <li>Pink marks the main actions (Agree, Add app, the + button, Create, Update), the active tab and selected chips. Green stays for status, Open and success.</li>
+      <li>New launcher icon, including a single-tone version for themed icons.</li>
+      <li>Classic green is still available as a color theme choice in Settings.</li>
+      <li>Dialogs read as paper, and the view mode tabs no longer cut off their labels.</li>
+    </ul>
+  </section>
+
+  <section class="release" aria-labelledby="v0-1-23">
+    <h2 id="v0-1-23">Version 0.1.23 (build 26)</h2>
+    <p class="meta">20 November 2026</p>
+    <ul>
+      <li>New color theme choice in Settings, next to light and dark: Duo Clone or Classic green. It applies at once and is remembered.</li>
+      <li>Camera clones can save photos on Android 16 and 17.</li>
+      <li>Clones of system apps, such as Camera, now ask for camera, microphone, location and (on Android 9 and older) storage permission with the normal dialog before they open.</li>
+      <li>The missing permission notice now also shows when the Contacts app closes its permission screen. On Android 16 and 17 the notice comes back as a dialog with the clone's name when you return to Duo Clone. A private clone is not named while the private space is locked.</li>
+      <li>Fixed a freeze the first time a clone that uses Google sign-in opened on Android 16.</li>
+      <li>The search keyboard closes when the new clone dialog opens, messages in the app picker show above the keyboard, and the copy number stays in order next to right-to-left text.</li>
+      <li>Clearer messages from the update check.</li>
+    </ul>
+  </section>
+
+  <section class="release" aria-labelledby="v0-1-22">
+    <h2 id="v0-1-22">Version 0.1.22 (build 25)</h2>
+    <p class="meta">20 November 2026</p>
+    <ul>
+      <li>Maintenance release with no changes you will notice.</li>
+    </ul>
+  </section>
+
+  <section class="release" aria-labelledby="v0-1-21">
+    <h2 id="v0-1-21">Version 0.1.21 (build 24)</h2>
+    <p class="meta">20 November 2026</p>
+    <ul>
+      <li>Fixed connection errors on Android 6 and 7.0, so the app reaches its online features on those versions.</li>
+      <li>On Android 9 and older, a camera clone can now save a photo, and it stays open afterwards instead of closing about ten seconds later.</li>
+      <li>Fixed a clone that closed unexpectedly after the phone's language changed, in some apps.</li>
+    </ul>
+  </section>
+
+  <section class="release" aria-labelledby="v0-1-20">
+    <h2 id="v0-1-20">Version 0.1.20 (build 23)</h2>
+    <p class="meta">20 November 2026</p>
+    <ul>
+      <li>The product name reads Duo Clone throughout the app, with more of its text translated into the 23 languages.</li>
+      <li>Typing in clones is smoother on Android 15 and 16: text fields no longer stall for a few seconds when you tap them, and the keyboard works with them.</li>
+      <li>Browsers based on Chromium now open and keep running inside clones instead of closing after about a minute.</li>
+      <li>Tapping a Protected app in the picker now tells you why it cannot be cloned.</li>
+      <li>The dialog for a second copy selects an account that is still unused.</li>
+      <li>The empty home button now reads Add app.</li>
+      <li>The clone badge and the quick-switch bubble no longer sit under the system bars.</li>
+      <li>The Contacts app in a clone no longer stays on a loading spinner on Android 16.</li>
+      <li>The missing permission notice also shows when a clone opens its App info page.</li>
+      <li>Fixed some clones that closed by themselves shortly after opening.</li>
+      <li>The app now tells you when a newer version is available, with the release notes.</li>
+    </ul>
+  </section>
+
+  <section class="release" aria-labelledby="v0-1-19">
+    <h2 id="v0-1-19">Version 0.1.19 (build 22)</h2>
+    <p class="meta">19 November 2026</p>
+    <ul>
+      <li>Stopping a clone now stops it for good. Opening a clone that is already running brings it to the front instead of starting it again.</li>
+      <li>Clones of older apps no longer draw under the status bar and the navigation bar on Android 15 and later.</li>
+      <li>The app picker shows apps that cannot be cloned, such as Settings, Files and other Duo Clone builds, dimmed with a Protected badge.</li>
+      <li>When a clone asks for a permission that Duo Clone cannot grant, you now see one short notice instead of nothing.</li>
+      <li>The home header and the running notification show correct clone counts in every language, the picker search starts empty, and the new clone dialog opens without the keyboard.</li>
+    </ul>
+  </section>
+
+  <p>Questions or bug reports? <a href="https://github.com/XLABCOMPANY/duoclone/issues">Open an issue on GitHub</a>, or go back to the <a href="../">Duo Clone developer page</a>.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</div>
+</footer>
+</body>
+</html>
