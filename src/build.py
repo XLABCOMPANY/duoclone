@@ -91,7 +91,8 @@ def website() -> dict:
 
 def app() -> dict:
     # No offers, prices or ratings: the app is not on sale here and nothing is invented.
-    return {'@type': 'MobileApplication', '@id': APP_ID, 'name': 'Duo Clone', 'operatingSystem': 'Android',
+    # operatingSystem matches what duoclone.com and duoclone.pages.dev publish for the same @id.
+    return {'@type': 'MobileApplication', '@id': APP_ID, 'name': 'Duo Clone', 'operatingSystem': 'Android 6.0+',
             'applicationCategory': 'UtilitiesApplication', 'url': APP_SITE,
             'description': 'An Android app cloner for running multiple accounts of the same app on one phone.',
             'image': SITE + 'assets/icon-512.png', 'author': {'@id': ORG_ID}, 'publisher': {'@id': ORG_ID},
@@ -135,8 +136,6 @@ def footer(depth: int) -> str:
     <nav aria-label="Footer">
       <a href="{r}notes/">Developer notes</a>
       <a href="{r}changelog/">Changelog</a>
-      <a href="{APP_SITE}">duoclone.com</a>
-      <a href="{APP_SITE}privacy/">Privacy</a>
       <a href="{REPO}">GitHub</a>
       <a href="https://xlabcompany.com/">XLAB</a>
     </nav>
@@ -314,8 +313,8 @@ def build():
         built.append((n['path'], n.get('modified', n['published']), words))
 
     # Notes index
-    idx = {'path': 'notes/', 'source': 'generated', 'title': 'Duo Clone Developer Notes: How an App Cloner Works',
-           'description': 'Developer notes from XLAB on how the Duo Clone app cloner works: Android platform rules, container limits, Google sign-in and what each Android release changed.'}
+    idx = {'path': 'notes/', 'source': 'generated', 'title': 'Duo Clone Developer Notes: Android Rules and Limits',
+           'description': 'Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.'}
     body = f'''<section class="list-head">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../">Home</a></li><li aria-current="page">Developer notes</li></ol></nav>

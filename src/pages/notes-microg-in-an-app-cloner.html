@@ -50,7 +50,7 @@
 <p>Each Account's microG data stays in that Account's space. As with every copy, that is separation kept by Duo Clone, not by the kernel; <a href="../how-app-copies-stay-separate/">how app copies stay separate</a> explains the limits.</p>
 
 <h2 id="what-it-does-not-do">What does microG not do inside a copy?</h2>
-<p><strong>Duo Clone's microG does not include DroidGuard and does not call Play Integrity or SafetyNet, so an app that insists on Google's device attestation can refuse to run in a copy.</strong> That is a deliberate choice: Duo Clone does not try to make a copy look like a certified original.</p>
+<p><strong>Duo Clone's microG does not run DroidGuard and does not call Play Integrity or SafetyNet, so an app that insists on Google's device attestation can refuse to run in a copy.</strong> That is a deliberate choice: Duo Clone does not try to make a copy look like a certified original.</p>
 <p>Banking and wallet apps usually fall in that group, and many also declare <a href="../require-secure-env/">REQUIRE_SECURE_ENV</a>, which Duo Clone honours by refusing to clone them. Sign-in also depends on the app: the sign-in screens come from the app and from microG, and wording can differ from one app to the next.</p>
 
 <h2 id="for-developers">What should other developers take from this?</h2>

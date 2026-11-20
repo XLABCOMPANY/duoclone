@@ -54,7 +54,7 @@
    "@type": "MobileApplication",
    "@id": "https://duoclone.com/#app",
    "name": "Duo Clone",
-   "operatingSystem": "Android",
+   "operatingSystem": "Android 6.0+",
    "applicationCategory": "UtilitiesApplication",
    "url": "https://duoclone.com/",
    "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
@@ -91,7 +91,7 @@
     "@id": "https://duoclone.com/#app"
    },
    "inLanguage": "en",
-   "wordCount": 1129
+   "wordCount": 1124
   },
   {
    "@type": "BreadcrumbList",
@@ -147,8 +147,8 @@
   <div class="wrap">
     <nav class="toc" aria-label="On this page">
   <p>On this page</p>
-  <ol><li><a href="#why-target-level">Why does the target API level matter more in a cloner?</a></li><li><a href="#edge-to-edge">What did edge-to-edge enforcement change?</a></li><li><a href="#predictive-back">What changed for the back gesture?</a></li><li><a href="#large-screens">What changed on large screens?</a></li><li><a href="#what-duo-clone-fixed">What did Duo Clone fix for Android 15, 16 and 17?</a></li><li><a href="#older-versions">Do the older Android versions still matter?</a></li><li><a href="#for-developers">What should app developers take from this?</a></li></ol>
-  <details><summary>On this page</summary><ol><li><a href="#why-target-level">Why does the target API level matter more in a cloner?</a></li><li><a href="#edge-to-edge">What did edge-to-edge enforcement change?</a></li><li><a href="#predictive-back">What changed for the back gesture?</a></li><li><a href="#large-screens">What changed on large screens?</a></li><li><a href="#what-duo-clone-fixed">What did Duo Clone fix for Android 15, 16 and 17?</a></li><li><a href="#older-versions">Do the older Android versions still matter?</a></li><li><a href="#for-developers">What should app developers take from this?</a></li></ol></details>
+  <ol><li><a href="#why-target-level">Why does the target API level matter more in a cloner?</a></li><li><a href="#edge-to-edge">What did edge-to-edge enforcement change?</a></li><li><a href="#predictive-back">What changed for the back gesture?</a></li><li><a href="#large-screens">What changed on large screens?</a></li><li><a href="#what-duo-clone-fixed">What did Duo Clone fix on the newest Android versions?</a></li><li><a href="#older-versions">Do the older Android versions still matter?</a></li><li><a href="#for-developers">What should app developers take from this?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#why-target-level">Why does the target API level matter more in a cloner?</a></li><li><a href="#edge-to-edge">What did edge-to-edge enforcement change?</a></li><li><a href="#predictive-back">What changed for the back gesture?</a></li><li><a href="#large-screens">What changed on large screens?</a></li><li><a href="#what-duo-clone-fixed">What did Duo Clone fix on the newest Android versions?</a></li><li><a href="#older-versions">Do the older Android versions still matter?</a></li><li><a href="#for-developers">What should app developers take from this?</a></li></ol></details>
 </nav>
     <div class="prose">
 <p class="answer"><strong>Android 15 and 16 changed app cloners in two ways: rules tied to an app's target API level got stricter, and edge-to-edge drawing can no longer be switched off once an app targets Android 16.</strong> A copy runs inside the cloner, so it is the cloner's target level that counts, not the cloned app's. Duo Clone versions 0.1.19 to 0.1.24 fixed the visible results: system bars over older apps, stalled text fields, the Contacts spinner and camera saves.</p>
@@ -172,7 +172,7 @@
 <p><strong>For apps that target Android 16, the system ignores orientation, resizability and aspect-ratio restrictions on large screens, those with a smallest width of at least 600dp.</strong> An app locked to portrait fills the window in the user's preferred orientation instead of being letterboxed. Google lists the affected manifest attributes and API calls, such as <code>screenOrientation</code> and <code>setRequestedOrientation()</code>, and exempts games, identified by the <code>android:appCategory</code> flag.</p>
 <p>On a phone this rarely shows. On a tablet or a foldable it is one more case where a copy can look different from the original install, for the same target-level reason.</p>
 
-<h2 id="what-duo-clone-fixed">What did Duo Clone fix for Android 15, 16 and 17?</h2>
+<h2 id="what-duo-clone-fixed">What did Duo Clone fix on the newest Android versions?</h2>
 <p><strong>Between 19 and 20 November 2026, versions 0.1.19 to 0.1.24 fixed these copy problems on the newest Android versions:</strong></p>
 <div class="table-wrap">
 <table>
@@ -192,7 +192,7 @@
 
 <h2 id="older-versions">Do the older Android versions still matter?</h2>
 <p><strong>Yes. Duo Clone runs copies on Android 6 through 16, and the oldest versions need their own fixes.</strong> In the same releases, 0.1.21 fixed connection errors on Android 6 and 7.0, and made camera clones on Android 9 and older save a photo and stay open instead of closing about ten seconds later.</p>
-<p>That range is the practical cost of a cloner: every new Android version adds target-level rules to cover, and the old versions do not go away. For a plain-language overview of what Duo Clone does on each of them, see <a href="https://duoclone.com/app-cloner/">how the Duo Clone cloner works on Android 6 to 16</a>.</p>
+<p>That range is the practical cost of a cloner: every new Android version adds target-level rules to cover, and the old versions do not go away. For a plain-language view of the same range, read <a href="https://duoclone.com/app-cloner/">the Duo Clone overview for every Android version from 6 to 16</a>.</p>
 
 <h2 id="for-developers">What should app developers take from this?</h2>
 <p><strong>If your app is used in copies, test it the way it will run there: under a host that targets the current API level.</strong> In practice, three checks catch most of the issues above:</p>
@@ -250,8 +250,6 @@
     <nav aria-label="Footer">
       <a href="../../notes/">Developer notes</a>
       <a href="../../changelog/">Changelog</a>
-      <a href="https://duoclone.com/">duoclone.com</a>
-      <a href="https://duoclone.com/privacy/">Privacy</a>
       <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
       <a href="https://xlabcompany.com/">XLAB</a>
     </nav>

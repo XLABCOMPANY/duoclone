@@ -35,12 +35,12 @@ Good to know: apps that ask not to run in a virtual space cannot be cloned, incl
 
 ## Latest release
 
-**Version 0.1.24 (build 27), 20 November 2026**
+**Version 0.1.25 (build 28), 20 November 2026**
 
-- The app now follows the Duo Clone look: paper and ink surfaces with green and pink accents.
-- Pink marks the main actions; green stays for status, Open and success.
-- New launcher icon, including a single-tone version for themed icons.
-- Classic green is still available as a color theme choice in Settings.
+- A new Add account row at the end of the By Account tab opens the app picker with the next new Account already selected.
+- The clone badge now docks on the left or right edge of the screen, keeps clear of the system bars and the camera cutout, and fades when you are not touching it.
+- Choosing a language inside the app applies it on the first tap, and notifications follow the language you chose.
+- The list and grid switch on My Clones is now an icon button; press and hold it to see its name.
 
 Every version, newest first: [Duo Clone changelog](https://xlabcompany.github.io/duoclone/changelog/).
 
@@ -55,16 +55,7 @@ How an Android app cloner works underneath, written by the developer:
 
 ## Guides on duoclone.com
 
-Plain-language guides on [duoclone.com](https://duoclone.com/):
-
-- [Duo Clone app cloner overview](https://duoclone.com/app-cloner/): what a copy is and what it cannot do.
-- [Guide to multiple accounts on Android](https://duoclone.com/multiple-accounts/)
-- [What is an app cloner?](https://duoclone.com/blog/what-is-app-cloner/)
-- [How to clone an app on Android, step by step](https://duoclone.com/blog/clone-app-android/)
-- [Two accounts on one phone](https://duoclone.com/blog/two-accounts-one-phone/)
-- [Is an app cloner safe?](https://duoclone.com/blog/is-app-cloner-safe/)
-- [Back up and restore a cloned app](https://duoclone.com/blog/backup-restore-cloned-app/)
-- [Battery and RAM use of cloned apps](https://duoclone.com/blog/cloned-apps-battery-ram/)
+The notes above are written for developers. If you use Duo Clone rather than build on Android, [duoclone.com](https://duoclone.com/) has the plain-language version: start with [a short explanation of what an app cloner is](https://duoclone.com/blog/what-is-app-cloner/), then follow [a walk-through of cloning an app for the first time](https://duoclone.com/blog/clone-app-android/). Before you rely on a copy, it is worth reading [how to keep a copy's data safe with a backup](https://duoclone.com/blog/backup-restore-cloned-app/), and if your phone slows down, there are [tips for keeping battery and memory use down](https://duoclone.com/blog/cloned-apps-battery-ram/). Every screen and button is covered, in the app's own words, in the [step-by-step user guide](https://duoclone.pages.dev/).
 
 ## Report a bug or suggest an idea
 

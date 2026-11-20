@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Duo Clone Developer Notes: How an App Cloner Works</title>
-<meta name="description" content="Developer notes from XLAB on how the Duo Clone app cloner works: Android platform rules, container limits, Google sign-in and what each Android release changed.">
+<title>Duo Clone Developer Notes: Android Rules and Limits</title>
+<meta name="description" content="Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.">
 <link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#fbfbf8">
 <meta name="author" content="XLAB">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Duo Clone developer page">
-<meta property="og:title" content="Duo Clone Developer Notes: How an App Cloner Works">
-<meta property="og:description" content="Developer notes from XLAB on how the Duo Clone app cloner works: Android platform rules, container limits, Google sign-in and what each Android release changed.">
+<meta property="og:title" content="Duo Clone Developer Notes: Android Rules and Limits">
+<meta property="og:description" content="Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.">
 <meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/">
 <meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/notes.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Duo Clone Developer Notes: How an App Cloner Works">
+<meta property="og:image:alt" content="Duo Clone Developer Notes: Android Rules and Limits">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Duo Clone Developer Notes: How an App Cloner Works">
-<meta name="twitter:description" content="Developer notes from XLAB on how the Duo Clone app cloner works: Android platform rules, container limits, Google sign-in and what each Android release changed.">
+<meta name="twitter:title" content="Duo Clone Developer Notes: Android Rules and Limits">
+<meta name="twitter:description" content="Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.">
 <meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/notes.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
@@ -54,7 +54,7 @@
    "@type": "MobileApplication",
    "@id": "https://duoclone.com/#app",
    "name": "Duo Clone",
-   "operatingSystem": "Android",
+   "operatingSystem": "Android 6.0+",
    "applicationCategory": "UtilitiesApplication",
    "url": "https://duoclone.com/",
    "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
@@ -191,8 +191,6 @@
     <nav aria-label="Footer">
       <a href="../notes/">Developer notes</a>
       <a href="../changelog/">Changelog</a>
-      <a href="https://duoclone.com/">duoclone.com</a>
-      <a href="https://duoclone.com/privacy/">Privacy</a>
       <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
       <a href="https://xlabcompany.com/">XLAB</a>
     </nav>

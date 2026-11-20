@@ -1,5 +1,16 @@
 [
   {
+    "version": "0.1.25",
+    "build": 28,
+    "date": "20 November 2026",
+    "items": [
+      "A new Add account row at the end of the By Account tab opens the app picker with the next new Account already selected.",
+      "The clone badge now docks on the left or right edge of the screen, keeps clear of the system bars and the camera cutout, and fades when you are not touching it.",
+      "Choosing a language inside the app applies it on the first tap, and notifications follow the language you chose.",
+      "The list and grid switch on My Clones is now an icon button; press and hold it to see its name."
+    ]
+  },
+  {
     "version": "0.1.24",
     "build": 27,
     "date": "20 November 2026",
