@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How App Copies Stay Separate on Android, and the Limits</title>
+<meta name="description" content="Android isolates apps by user ID, and copies in an app cloner share the cloner&#x27;s. How that separation works, where it stops, and how clone profiles differ.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/how-app-copies-stay-separate/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fbfbf8">
+<meta name="author" content="XLAB">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Duo Clone developer page">
+<meta property="og:title" content="How App Copies Stay Separate on Android, and the Limits">
+<meta property="og:description" content="Android isolates apps by user ID, and copies in an app cloner share the cloner&#x27;s. How that separation works, where it stops, and how clone profiles differ.">
+<meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/how-app-copies-stay-separate/">
+<meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/how-app-copies-stay-separate.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How App Copies Stay Separate on Android, and the Limits">
+<meta name="twitter:description" content="Android isolates apps by user ID, and copies in an app cloner share the cloner&#x27;s. How that separation works, where it stops, and how clone profiles differ.">
+<meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/how-app-copies-stay-separate.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/be-vietnam-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="sitemap" type="application/xml" href="https://xlabcompany.github.io/duoclone/sitemap.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://xlabcompany.com/#organization",
+   "name": "XLAB",
+   "url": "https://xlabcompany.com/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://xlabcompany.github.io/duoclone/#website",
+   "url": "https://xlabcompany.github.io/duoclone/",
+   "name": "Duo Clone developer page",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   }
+  },
+  {
+   "@type": "MobileApplication",
+   "@id": "https://duoclone.com/#app",
+   "name": "Duo Clone",
+   "operatingSystem": "Android",
+   "applicationCategory": "UtilitiesApplication",
+   "url": "https://duoclone.com/",
+   "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
+   "image": "https://xlabcompany.github.io/duoclone/assets/icon-512.png",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "sameAs": [
+    "https://github.com/XLABCOMPANY/duoclone"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://xlabcompany.github.io/duoclone/notes/how-app-copies-stay-separate/#article",
+   "headline": "How app copies stay separate, and where the limits are",
+   "description": "Android isolates apps by user ID, and copies in an app cloner share the cloner's. How that separation works, where it stops, and how clone profiles differ.",
+   "datePublished": "2026-11-20",
+   "dateModified": "2026-11-20",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "image": "https://xlabcompany.github.io/duoclone/og/how-app-copies-stay-separate.png",
+   "mainEntityOfPage": "https://xlabcompany.github.io/duoclone/notes/how-app-copies-stay-separate/",
+   "isPartOf": {
+    "@id": "https://xlabcompany.github.io/duoclone/#website"
+   },
+   "about": {
+    "@id": "https://duoclone.com/#app"
+   },
+   "inLanguage": "en",
+   "wordCount": 1143
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://xlabcompany.github.io/duoclone/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Developer notes",
+     "item": "https://xlabcompany.github.io/duoclone/notes/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How app copies stay separate, and where the limits are",
+     "item": "https://xlabcompany.github.io/duoclone/notes/how-app-copies-stay-separate/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/icon-192.png" width="40" height="40" alt=""><span><b>Duo Clone</b><small>Developer page by XLAB</small></span></a>
+    <nav class="nav" aria-label="Main"><a href="../.././">Home</a><a href="../../notes/" aria-current="page">Notes</a><a href="../../changelog/">Changelog</a><a href="https://github.com/XLABCOMPANY/duoclone"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.84c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a></nav>
+  </div>
+</header>
+<main id="main">
+<article>
+<header class="art-head">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../../">Home</a></li><li><a href="../">Developer notes</a></li><li aria-current="page">How app copies stay separate, and where the limits are</li></ol></nav>
+      <h1>How app copies stay separate, and where the limits are</h1>
+      <p class="byline"><span>By <b><a href="https://xlabcompany.com/" rel="author">XLAB</a></b>, developer of Duo Clone</span><span class="dot"></span><time datetime="2026-11-20">20 November 2026</time><span class="dot"></span><span>7 min read</span></p>
+    </div>
+    <figure class="art-cover">
+      <img src="copies-one-uid.svg" width="1200" height="630" alt="Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile" fetchpriority="high">
+      <figcaption>Left: copies in one cloner share its user ID. Right: profiles are separate users, kept apart by the kernel.</figcaption>
+    </figure>
+  </div>
+</header>
+<div class="art-body">
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+  <p>On this page</p>
+  <ol><li><a href="#android-sandbox">How does Android keep apps apart?</a></li><li><a href="#what-changes">What changes when an app runs as a copy?</a></li><li><a href="#how-duo-clone-separates">How does Duo Clone keep copies apart?</a></li><li><a href="#the-limits">Where does that separation stop?</a></li><li><a href="#profiles">How do clone profiles and private space differ?</a></li><li><a href="#for-developers">What does this mean for app developers?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#android-sandbox">How does Android keep apps apart?</a></li><li><a href="#what-changes">What changes when an app runs as a copy?</a></li><li><a href="#how-duo-clone-separates">How does Duo Clone keep copies apart?</a></li><li><a href="#the-limits">Where does that separation stop?</a></li><li><a href="#profiles">How do clone profiles and private space differ?</a></li><li><a href="#for-developers">What does this mean for app developers?</a></li></ol></details>
+</nav>
+    <div class="prose">
+<p class="answer"><strong>App copies made by a cloner such as Duo Clone stay separate because the cloner keeps each copy's data and sign-ins in its own space; Android's kernel does not.</strong> Every copy runs under the cloner's single Android user ID, so the separation is real for everyday use but is not a security sandbox. Clone profiles and Android 15's private space are separate users instead, with stronger isolation and narrower availability.</p>
+
+<p>This note explains the difference from the developer's side: how Android isolates apps, what changes when an app runs as a copy, how Duo Clone keeps copies apart, and where that stops.</p>
+
+<h2 id="android-sandbox">How does Android keep apps apart?</h2>
+<p><strong>Android gives every installed app its own Linux user ID (UID) and runs it in its own process, and the kernel uses that UID to keep apps out of each other's data.</strong> The Android Open Source Project describes this as the Application Sandbox: if app A tries to read app B's data, the kernel stops it because A lacks the user privileges to do so. Because the sandbox lives in the kernel, it covers native code exactly as it covers Java or Kotlin code.</p>
+<p>Two consequences matter here. Each normally installed app has a private data directory that only its UID can open. And when an app asks for a permission, Android grants it to that UID, not to some smaller part of the app.</p>
+
+<h2 id="what-changes">What changes when an app runs as a copy?</h2>
+<p><strong>A copy runs inside the cloner's own app space, so to Android it is the cloner, with the cloner's UID, permissions and storage.</strong> Duo Clone uses the app that is already installed on your phone rather than installing a second package. Android sees one app, Duo Clone, doing the work for every copy.</p>
+<p>You can see this from the outside. When a copy needs camera or location access, the permission dialog is for Duo Clone, because Duo Clone is the app Android knows. When a copy asks for a permission Duo Clone cannot grant, recent versions show one short notice instead of failing silently (changelog, versions 0.1.19 and 0.1.23). Anything a copy saves lands in Duo Clone's storage area.</p>
+<p>Security researchers who study cloners describe the same model: the cloned app is effectively running as the cloner, which is why you must trust the cloner with everything the copies hold.</p>
+
+<h2 id="how-duo-clone-separates">How does Duo Clone keep copies apart?</h2>
+<p><strong>Duo Clone gives every copy its own data and groups copies into Accounts, each a separate space with its own Google sign-in.</strong> These rules apply to the app as you use it:</p>
+<ul>
+<li><strong>Each copy has its own data.</strong> What a copy stores stays with that copy, and deleting the copy erases it. The original app is not touched.</li>
+<li><strong>Accounts are separate spaces.</strong> Apps in the same Account share one Google sign-in; a copy in Account 2 signs in apart from Account 1.</li>
+<li><strong>One copy of an app per Account.</strong> To run the same app twice, the second copy goes in another Account, which is what keeps the two logins apart.</li>
+</ul>
+<p>This is enough for what most people use copies for: a work and a personal chat account, or several seller accounts, each staying signed in without mixing messages, settings or caches.</p>
+
+<h2 id="the-limits">Where does that separation stop?</h2>
+<p><strong>It stops at the UID. Because every copy runs under the same Android user ID as Duo Clone, the kernel does not stand between one copy and another.</strong> The separation is applied by Duo Clone in software and is aimed at apps that behave normally. An app written to look for its neighbours runs with the same Android privileges as every other copy, so it is not held back the way a separate Android user would hold it back.</p>
+<p>That leads to three plain rules:</p>
+<ol>
+<li><strong>Use copies for separate logins, not to isolate an app you do not trust.</strong> Do not put an unknown app in the same cloner as copies that hold private chats.</li>
+<li><strong>Keep money and identity apps out of copies.</strong> This is why apps that declare <a href="../require-secure-env/">REQUIRE_SECURE_ENV</a> are refused, with no way around it.</li>
+<li><strong>Private Space hides copies from people, not from apps.</strong> Its fingerprint or PIN lock keeps copies out of sight from someone holding your phone. It does not protect against harmful apps.</li>
+</ol>
+<p>The same limits, written for people choosing a cloner rather than building one, are on the Duo Clone website in <a href="https://duoclone.com/blog/is-app-cloner-safe/">what to check before trusting a cloner with your logins</a>.</p>
+
+<h2 id="profiles">How do clone profiles and private space differ?</h2>
+<p><strong>A clone profile and Android 15's private space are separate Android users, so the kernel keeps their apps apart; a copy in a cloner is not.</strong> The AOSP multi-user documentation defines both:</p>
+<ul>
+<li><strong>Clone profile:</strong> a separate user type that lets a phone run two instances of one app. AOSP does not provide the feature end to end; phone makers add their own customisations to deliver it, which is why it looks and behaves differently from brand to brand.</li>
+<li><strong>Private profile:</strong> a sandboxed space for the main user that can be locked separately. In Android 15's private space, apps are installed as new copies inside it, accounts and files are kept apart from the main space, and locking it stops the profile so its apps cannot run at all.</li>
+</ul>
+<div class="table-wrap">
+<table>
+<thead><tr><th></th><th>Normal install</th><th>Copy in Duo Clone</th><th>Clone profile</th><th>Private space</th></tr></thead>
+<tbody>
+<tr><td>Android user ID</td><td>Its own</td><td>Shared with Duo Clone</td><td>Its own, in another user</td><td>Its own, in another user</td></tr>
+<tr><td>Who keeps apps apart</td><td>Kernel</td><td>Duo Clone</td><td>Kernel</td><td>Kernel</td></tr>
+<tr><td>Copies of one app</td><td>One</td><td>Several, one per Account</td><td>Two</td><td>One extra</td></tr>
+<tr><td>Availability</td><td>Every phone</td><td>Android 6 to 16</td><td>Depends on the phone maker</td><td>Android 15 and later, where shipped</td></tr>
+</tbody>
+</table>
+</div>
+<p>Built-in options are the stronger boundary when your phone has them. A cloner covers phones and Android versions that do not, and more than one extra account. For one phone maker's version of this choice, see <a href="https://duoclone.com/blog/second-space-vs-dual-apps/">how a separate space compares with a cloned app on Xiaomi</a>.</p>
+
+<h2 id="for-developers">What does this mean for app developers?</h2>
+<p><strong>Assume a copy of your app can sit next to other copies under one UID, and design what you store with that in mind.</strong> Keep secrets on your server or in hardware-backed keys tied to a server check, not only in local files. If your app should never run in that setting, declare REQUIRE_SECURE_ENV. Cloners on Google Play have to honour it, and checks such as the Play Integrity API cover the rest.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Android Open Source Project, <a href="https://source.android.com/docs/security/app-sandbox">Application Sandbox</a> (page last updated 30 September 2026, read 20 November 2026).</li>
+<li>Android Open Source Project, <a href="https://source.android.com/docs/devices/admin/multi-user">Support multiple users</a> (page last updated 22 September 2026, read 20 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/about/versions/15/features">Android 15 features and APIs</a>, private space section (read 20 November 2026).</li>
+<li>Approov, <a href="https://approov.io/blog/cloner-apps-playing-in-a-shared-sandbox">Cloner Apps: Playing in a Shared Sandbox</a> (read 20 November 2026).</li>
+<li>Duo Clone behaviour: <a href="../../changelog/">changelog</a> and the app's Account rules.</li>
+</ul>
+</section>
+
+    </div>
+  </div>
+</div>
+</article>
+<section class="section related" aria-labelledby="related-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="related-title">More developer notes</h2><a class="more" href="../">All notes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="notes-grid"><article class="note-card">
+  <div class="cover"><img src="../../notes/require-secure-env/secure-env-opt-out.svg" width="1200" height="630" alt="Android manifest sheet with the REQUIRE_SECURE_ENV line marked in pink, and an app card stopped at a dashed container border" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/require-secure-env/">REQUIRE_SECURE_ENV: how an Android app opts out of app cloners</a></h3>
+    <p>One manifest line tells app cloners on Google Play to leave your app alone. What it covers, how it differs from Play Integrity, and how Duo Clone honours it.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/android-15-16-app-cloners/android-15-16-insets.svg" width="1200" height="630" alt="Phone outline with status and navigation bars, an older app card sliding under the bars in pink and sitting inside them in green, labelled API 35 and API 36" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/android-15-16-app-cloners/">What Android 15 and 16 changed for app cloners</a></h3>
+    <p>Edge-to-edge with no way out, predictive back, and the copy-specific bugs Duo Clone fixed on the newest Android versions, release by release.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/microg-in-an-app-cloner/microg-account-spaces.svg" width="1200" height="630" alt="Three Account spaces drawn as rounded frames, each holding app copies and one key for its sign-in, beside an Apache 2.0 licence sheet" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/microg-in-an-app-cloner/">Shipping microG inside an app cloner: licence, Accounts and limits</a></h3>
+    <p>Why an app cloner needs microG, what the Apache 2.0 licence asks of anyone who ships it, and how Duo Clone gives each Account its own Google sign-in.</p>
+  </div>
+</article></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</p>
+    <nav aria-label="Footer">
+      <a href="../../notes/">Developer notes</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="https://duoclone.com/">duoclone.com</a>
+      <a href="https://duoclone.com/privacy/">Privacy</a>
+      <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
+      <a href="https://xlabcompany.com/">XLAB</a>
+    </nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+  var p=document.querySelector('[data-print]');
+  if(p&&'IntersectionObserver' in window){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){setTimeout(function(){p.classList.add('in')},120);o.disconnect();}})},{threshold:.4});o.observe(p);}else if(p){p.classList.add('in');}
+  var links=[].slice.call(document.querySelectorAll('.toc > ol a'));
+  if(links.length&&'IntersectionObserver' in window){
+    var map={};links.forEach(function(a){map[a.hash.slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on');}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=document.getElementById(id);if(h)io.observe(h);});
+  }
+})();
+</script>
+</body>
+</html>

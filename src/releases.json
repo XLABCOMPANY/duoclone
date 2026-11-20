@@ -1,0 +1,76 @@
+[
+  {
+    "version": "0.1.24",
+    "build": 27,
+    "date": "20 November 2026",
+    "items": [
+      "The app now follows the Duo Clone look: paper and ink surfaces with green and pink accents. The Duo Clone mark and name appear in the header, the consent screen, About and the opening screen.",
+      "Pink marks the main actions (Agree, Add app, the + button, Create, Update), the active tab and selected chips. Green stays for status, Open and success.",
+      "New launcher icon, including a single-tone version for themed icons.",
+      "Classic green is still available as a color theme choice in Settings.",
+      "Dialogs read as paper, and the view mode tabs no longer cut off their labels."
+    ]
+  },
+  {
+    "version": "0.1.23",
+    "build": 26,
+    "date": "20 November 2026",
+    "items": [
+      "New color theme choice in Settings, next to light and dark: Duo Clone or Classic green. It applies at once and is remembered.",
+      "Camera clones can save photos on Android 16 and 17.",
+      "Clones of system apps, such as Camera, now ask for camera, microphone, location and (on Android 9 and older) storage permission with the normal dialog before they open.",
+      "The missing permission notice now also shows when the Contacts app closes its permission screen. On Android 16 and 17 the notice comes back as a dialog with the clone's name when you return to Duo Clone. A private clone is not named while the private space is locked.",
+      "Fixed a freeze the first time a clone that uses Google sign-in opened on Android 16.",
+      "The search keyboard closes when the new clone dialog opens, messages in the app picker show above the keyboard, and the copy number stays in order next to right-to-left text.",
+      "Clearer messages from the update check."
+    ]
+  },
+  {
+    "version": "0.1.22",
+    "build": 25,
+    "date": "20 November 2026",
+    "items": [
+      "Maintenance release with no changes you will notice."
+    ]
+  },
+  {
+    "version": "0.1.21",
+    "build": 24,
+    "date": "20 November 2026",
+    "items": [
+      "Fixed connection errors on Android 6 and 7.0, so the app reaches its online features on those versions.",
+      "On Android 9 and older, a camera clone can now save a photo, and it stays open afterwards instead of closing about ten seconds later.",
+      "Fixed a clone that closed unexpectedly after the phone's language changed, in some apps."
+    ]
+  },
+  {
+    "version": "0.1.20",
+    "build": 23,
+    "date": "20 November 2026",
+    "items": [
+      "The product name reads Duo Clone throughout the app, with more of its text translated into the 23 languages.",
+      "Typing in clones is smoother on Android 15 and 16: text fields no longer stall for a few seconds when you tap them, and the keyboard works with them.",
+      "Browsers based on Chromium now open and keep running inside clones instead of closing after about a minute.",
+      "Tapping a Protected app in the picker now tells you why it cannot be cloned.",
+      "The dialog for a second copy selects an account that is still unused.",
+      "The empty home button now reads Add app.",
+      "The clone badge and the quick-switch bubble no longer sit under the system bars.",
+      "The Contacts app in a clone no longer stays on a loading spinner on Android 16.",
+      "The missing permission notice also shows when a clone opens its App info page.",
+      "Fixed some clones that closed by themselves shortly after opening.",
+      "The app now tells you when a newer version is available, with the release notes."
+    ]
+  },
+  {
+    "version": "0.1.19",
+    "build": 22,
+    "date": "19 November 2026",
+    "items": [
+      "Stopping a clone now stops it for good. Opening a clone that is already running brings it to the front instead of starting it again.",
+      "Clones of older apps no longer draw under the status bar and the navigation bar on Android 15 and later.",
+      "The app picker shows apps that cannot be cloned, such as Settings, Files and other Duo Clone builds, dimmed with a Protected badge.",
+      "When a clone asks for a permission that Duo Clone cannot grant, you now see one short notice instead of nothing.",
+      "The home header and the running notification show correct clone counts in every language, the picker search starts empty, and the new clone dialog opens without the keyboard."
+    ]
+  }
+]

@@ -1,0 +1,167 @@
+"""Draws the note covers as two-ink Riso line art (1200x630, the Open Graph ratio).
+
+Every drawing is printed twice: a pink plate (multiplied, a few pixels off register) under deep-ink line work,
+with Riso green as the flood ink. Generic, self-drawn shapes only: no third-party marks.
+Run: python3 src/covers.py  (writes docs/notes/<slug>/<cover>.svg)
+"""
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+INK, GREEN, PINK, PAPER, PAPER2, OVER = '#0e2a1f', '#00a95c', '#ff48b0', '#fbfbf8', '#f2f3ec', '#5b2e4a'
+MONO = "ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+SANS = "'Arial', 'Helvetica', sans-serif"
+
+
+def svg(body: str, title: str) -> str:
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img">
+<title>{title}</title>
+<defs>
+  <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r="2.6" fill="{PINK}"/></pattern>
+  <pattern id="dotsG" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2.2" fill="{GREEN}"/></pattern>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="{INK}" stroke-width="2"/></pattern>
+</defs>
+<rect width="1200" height="630" fill="{PAPER}"/>
+{reg_marks()}
+{body}
+</svg>
+'''
+
+
+def reg_marks() -> str:
+    out = []
+    for x, y in ((46, 46), (1154, 46), (46, 584), (1154, 584)):
+        out.append(f'<g stroke="{INK}" stroke-width="2" fill="none"><circle cx="{x}" cy="{y}" r="11"/>'
+                   f'<line x1="{x-19}" y1="{y}" x2="{x+19}" y2="{y}"/><line x1="{x}" y1="{y-19}" x2="{x}" y2="{y+19}"/></g>')
+    return '\n'.join(out)
+
+
+def plate(shape: str, dx=12, dy=9) -> str:
+    """Pink second pass under a shape, multiplied and off register."""
+    return f'<g transform="translate({dx} {dy})" style="mix-blend-mode:multiply" opacity="0.9">{shape}</g>'
+
+
+def app_card(x, y, s=1.0, fill=GREEN, glyph='chat', dashed=False) -> str:
+    """A generic rounded app card (120 units square) with a self-drawn glyph, scaled as one group."""
+    dash = ' stroke-dasharray="10 8"' if dashed else ''
+    g = {
+        'chat': f'<path d="M32 38 h56 a10 10 0 0 1 10 10 v24 a10 10 0 0 1 -10 10 h-30 l-16 14 v-14 h-10 a10 10 0 0 1 -10 -10 v-24 a10 10 0 0 1 10 -10z" fill="{PAPER}" stroke="{INK}" stroke-width="4" stroke-linejoin="round"/>',
+        'note': f'<rect x="34" y="28" width="52" height="64" rx="8" fill="{PAPER}" stroke="{INK}" stroke-width="4"/><path d="M44 48 h32 M44 62 h32 M44 76 h20" stroke="{INK}" stroke-width="4" stroke-linecap="round"/>',
+        'shield': f'<path d="M60 26 l30 12 v22 c0 22 -14 34 -30 40 c-16 -6 -30 -18 -30 -40 v-22z" fill="{PAPER}" stroke="{INK}" stroke-width="4" stroke-linejoin="round"/><path d="M48 62 l9 9 l17 -18" fill="none" stroke="{INK}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>',
+        'camera': f'<rect x="26" y="40" width="68" height="48" rx="10" fill="{PAPER}" stroke="{INK}" stroke-width="4"/><circle cx="60" cy="64" r="13" fill="none" stroke="{INK}" stroke-width="4"/><path d="M46 40 l6 -9 h16 l6 9" fill="none" stroke="{INK}" stroke-width="4" stroke-linejoin="round"/>',
+        'key': f'<circle cx="44" cy="60" r="15" fill="{PAPER}" stroke="{INK}" stroke-width="4"/><path d="M59 60 h34 M84 60 v13 M75 60 v9" stroke="{INK}" stroke-width="4" stroke-linecap="round"/>',
+    }[glyph]
+    return (f'<g transform="translate({x} {y}) scale({s})"><rect width="120" height="120" rx="28" fill="{fill}" stroke="{INK}" stroke-width="4.5"{dash}/>'
+            + g + '</g>')
+
+
+def secure_env() -> str:
+    lines = []
+    y0 = 172
+    widths = [300, 250, 340, 200, 380, 260, 310, 220]
+    for i, w in enumerate(widths):
+        y = y0 + i * 40
+        if i == 3:
+            continue
+        indent = 40 if 0 < i < 7 else 0
+        lines.append(f'<rect x="{170+indent}" y="{y}" width="{w-indent}" height="12" rx="6" fill="{INK}" opacity="0.22"/>')
+    marked = (f'<rect x="196" y="{y0+3*40-20}" width="396" height="52" rx="10" fill="{PINK}" opacity="0.85" style="mix-blend-mode:multiply"/>'
+              f'<text x="214" y="{y0+3*40+14}" font-family="{MONO}" font-size="27" font-weight="700" fill="{INK}">REQUIRE_SECURE_ENV = 1</text>')
+    sheet = (f'<path d="M130 100 h420 l60 60 v380 a18 18 0 0 1 -18 18 h-462 a18 18 0 0 1 -18 -18 v-422 a18 18 0 0 1 18 -18z" fill="{PAPER}" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>'
+             f'<path d="M550 100 v60 h60" fill="none" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>'
+             f'<text x="160" y="146" font-family="{MONO}" font-size="22" fill="{INK}" opacity="0.75">AndroidManifest.xml</text>')
+    sheet_plate = plate(f'<path d="M130 100 h420 l60 60 v380 a18 18 0 0 1 -18 18 h-462 a18 18 0 0 1 -18 -18 v-422 a18 18 0 0 1 18 -18z" fill="{PINK}"/>', 14, 11)
+    container = (f'<rect x="812" y="120" width="300" height="400" rx="46" fill="url(#dotsG)" opacity="0.35"/>'
+                 f'<rect x="812" y="120" width="300" height="400" rx="46" fill="none" stroke="{INK}" stroke-width="5" stroke-dasharray="18 14"/>'
+                 + app_card(842, 170, 0.95, GREEN, 'chat') + app_card(972, 170, 0.95, GREEN, 'note')
+                 + app_card(842, 320, 0.95, PAPER2, 'camera', dashed=True))
+    blocked = (plate(f'<rect x="660" y="300" width="125" height="125" rx="30" fill="{PINK}"/>', 10, 8)
+               + app_card(656, 296, 1.04, GREEN, 'shield')
+               + f'<path d="M800 280 v170" stroke="{INK}" stroke-width="8" stroke-linecap="round"/>'
+               + f'<path d="M780 458 c-30 28 -90 30 -120 4" fill="none" stroke="{INK}" stroke-width="4" stroke-dasharray="8 8"/>'
+               + f'<path d="M668 452 l-9 12 l14 4" fill="none" stroke="{INK}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>')
+    sun = f'<circle cx="1040" cy="560" r="70" fill="url(#dots)" opacity="0.85"/>'
+    return svg(sun + sheet_plate + sheet + ''.join(lines) + marked + container + blocked,
+               'Manifest with REQUIRE_SECURE_ENV and an app kept outside a container')
+
+
+def insets() -> str:
+    phone = lambda x, label, ok: (
+        plate(f'<rect x="{x}" y="70" width="300" height="500" rx="46" fill="{PINK}"/>', 12, 10)
+        + f'<rect x="{x}" y="70" width="300" height="500" rx="46" fill="{PAPER}" stroke="{INK}" stroke-width="5"/>'
+        + f'<rect x="{x+18}" y="92" width="264" height="36" rx="10" fill="url(#hatch)" opacity="0.55"/>'
+        + f'<rect x="{x+18}" y="512" width="264" height="36" rx="10" fill="url(#hatch)" opacity="0.55"/>'
+        + f'<rect x="{x+130}" y="527" width="40" height="6" rx="3" fill="{INK}"/>'
+        + (
+            # content sits inside the safe area
+            f'<rect x="{x+28}" y="142" width="244" height="356" rx="20" fill="{GREEN}" stroke="{INK}" stroke-width="4"/>'
+            f'<rect x="{x+50}" y="166" width="150" height="14" rx="7" fill="{INK}"/>'
+            f'<rect x="{x+50}" y="196" width="200" height="10" rx="5" fill="{PAPER}"/><rect x="{x+50}" y="216" width="170" height="10" rx="5" fill="{PAPER}"/>'
+            f'<rect x="{x+50}" y="440" width="200" height="38" rx="12" fill="{PAPER}" stroke="{INK}" stroke-width="4"/>'
+            if ok else
+            # content slides under both bars
+            f'<rect x="{x+28}" y="96" width="244" height="448" rx="20" fill="{PINK}" opacity="0.7" stroke="{INK}" stroke-width="4" stroke-dasharray="12 9" style="mix-blend-mode:multiply"/>'
+            f'<rect x="{x+50}" y="104" width="150" height="14" rx="7" fill="{INK}"/>'
+            f'<rect x="{x+50}" y="500" width="200" height="38" rx="12" fill="{PAPER}" stroke="{INK}" stroke-width="4" stroke-dasharray="8 6"/>'
+        )
+        + f'<rect x="{x+60}" y="586" width="180" height="0.1"/>'
+        + f'<text x="{x+150}" y="612" text-anchor="middle" font-family="{SANS}" font-size="26" font-weight="700" fill="{INK}">{label}</text>'
+    )
+    arrow = (f'<path d="M560 320 h70" stroke="{INK}" stroke-width="6" stroke-linecap="round"/>'
+             f'<path d="M612 300 l22 20 l-22 20" fill="none" stroke="{INK}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>')
+    ruler = ''.join(f'<line x1="1060" y1="{y}" x2="{1060 + (22 if i % 4 == 0 else 12)}" y2="{y}" stroke="{INK}" stroke-width="3"/>' for i, y in enumerate(range(90, 560, 16)))
+    ruler += f'<line x1="1060" y1="88" x2="1060" y2="556" stroke="{INK}" stroke-width="3"/>'
+    sun = f'<circle cx="150" cy="120" r="80" fill="url(#dots)" opacity="0.8"/>'
+    return svg(sun + phone(220, 'Before: under the bars', False) + arrow + phone(700, 'After: inside the insets', True) + ruler,
+               'An older app drawn under the system bars, then inside the insets')
+
+
+def one_uid() -> str:
+    big = (plate('<rect x="110" y="110" width="560" height="400" rx="44" fill="#ff48b0"/>', 14, 11)
+           + f'<rect x="110" y="110" width="560" height="400" rx="44" fill="{PAPER}" stroke="{INK}" stroke-width="5"/>'
+           + f'<rect x="138" y="138" width="504" height="344" rx="30" fill="url(#dotsG)" opacity="0.3"/>'
+           + f'<line x1="390" y1="150" x2="390" y2="470" stroke="{INK}" stroke-width="4" stroke-dasharray="14 12"/>'
+           + app_card(185, 200, 1.25, GREEN, 'chat') + app_card(450, 200, 1.25, GREEN, 'chat')
+           + f'<rect x="200" y="380" width="120" height="16" rx="8" fill="{INK}" opacity="0.25"/><rect x="465" y="380" width="120" height="16" rx="8" fill="{INK}" opacity="0.25"/>'
+           + f'<rect x="270" y="532" width="240" height="50" rx="25" fill="{INK}"/>'
+           + f'<text x="390" y="565" text-anchor="middle" font-family="{SANS}" font-size="26" font-weight="700" fill="{PAPER}">one UID</text>')
+    small = lambda y, label: (
+        f'<rect x="760" y="{y}" width="340" height="190" rx="34" fill="{PAPER}" stroke="{INK}" stroke-width="5"/>'
+        + app_card(790, y + 38, 0.95, GREEN, 'chat')
+        + f'<text x="928" y="{y+86}" font-family="{SANS}" font-size="25" font-weight="700" fill="{INK}">{label}</text>'
+        + f'<text x="928" y="{y+120}" font-family="{SANS}" font-size="21" fill="{INK}" opacity="0.75">own UID</text>')
+    sun = f'<circle cx="1110" cy="560" r="64" fill="url(#dots)" opacity="0.85"/>'
+    return svg(sun + big + small(100, 'Main user') + small(340, 'Profile'),
+               'Two copies sharing one UID beside a main user and a profile with their own')
+
+
+def accounts() -> str:
+    def space(x, n):
+        return (plate(f'<rect x="{x}" y="150" width="230" height="330" rx="38" fill="{PINK}"/>', 11, 9)
+                + f'<rect x="{x}" y="150" width="230" height="330" rx="38" fill="{PAPER}" stroke="{INK}" stroke-width="5"/>'
+                + f'<text x="{x+115}" y="200" text-anchor="middle" font-family="{SANS}" font-size="26" font-weight="700" fill="{INK}">Account {n}</text>'
+                + app_card(x + 20, 228, 0.74, GREEN, 'chat') + app_card(x + 121, 228, 0.74, GREEN if n != 3 else PAPER2, 'note', dashed=(n == 3))
+                + f'<line x1="{x+24}" y1="352" x2="{x+206}" y2="352" stroke="{INK}" stroke-width="3" stroke-dasharray="10 8"/>'
+                + app_card(x + 55, 368, 0.98, PAPER, 'key'))
+    licence = (f'<rect x="900" y="120" width="210" height="300" rx="16" fill="{PAPER2}" stroke="{INK}" stroke-width="5" transform="rotate(4 1005 270)"/>'
+               f'<g transform="rotate(4 1005 270)"><text x="926" y="176" font-family="{SANS}" font-size="27" font-weight="700" fill="{INK}">Apache</text>'
+               f'<text x="926" y="208" font-family="{SANS}" font-size="27" font-weight="700" fill="{INK}">License 2.0</text>'
+               + ''.join(f'<rect x="926" y="{236 + i*26}" width="{150 - (i % 3)*30}" height="10" rx="5" fill="{INK}" opacity="0.25"/>' for i in range(6))
+               + f'<circle cx="1060" cy="392" r="24" fill="{GREEN}" stroke="{INK}" stroke-width="4"/><path d="M1049 392 l8 8 l14 -15" fill="none" stroke="{INK}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>')
+    sun = f'<circle cx="140" cy="540" r="70" fill="url(#dots)" opacity="0.85"/>'
+    return svg(sun + space(110, 1) + space(370, 2) + space(630, 3) + licence,
+               'Three Account spaces, each with its own sign-in key, beside a licence sheet')
+
+
+COVERS = {
+    'notes/require-secure-env/secure-env-opt-out.svg': secure_env,
+    'notes/android-15-16-app-cloners/android-15-16-insets.svg': insets,
+    'notes/how-app-copies-stay-separate/copies-one-uid.svg': one_uid,
+    'notes/microg-in-an-app-cloner/microg-account-spaces.svg': accounts,
+}
+
+if __name__ == '__main__':
+    for rel, fn in COVERS.items():
+        out = ROOT / 'docs' / rel
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(fn())
+        print('wrote', out.relative_to(ROOT))

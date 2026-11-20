@@ -1,0 +1,121 @@
+{
+  "path": "",
+  "kind": "home",
+  "title": "Duo Clone – Official Developer Page by XLAB",
+  "h1": "Duo Clone for Android, from the people who build it",
+  "description": "Official developer page for Duo Clone, the Android app cloner for running multiple accounts of one app. Developer notes, release notes and the official channel.",
+  "published": "2026-11-19"
+}
+---
+<section class="hero" aria-labelledby="page-title">
+  <div class="wrap">
+    <div>
+      <h1 id="page-title">Duo Clone for Android, from the <em>people who build it</em></h1>
+      <p class="lede">Duo Clone is an Android app cloner for running two or more accounts of the same app on one phone. XLAB builds it. This page carries the release notes, the developer notes and the one official channel.</p>
+      <div class="actions">
+        <a class="btn" href="notes/">Read the developer notes {{ICON_ARROW}}</a>
+        <a class="btn paper" href="changelog/">What changed in {{LATEST_VERSION}}</a>
+      </div>
+      <p class="channel">{{ICON_PLAY}}<span><b>Official channel.</b> Google Play is the only official channel for Duo Clone; it is never offered as an APK.</span></p>
+    </div>
+    <div class="press" data-print aria-hidden="true">
+      <svg class="field" viewBox="0 0 520 520">
+        <defs><pattern id="hd" width="15" height="15" patternUnits="userSpaceOnUse"><circle cx="7.5" cy="7.5" r="2.9" fill="#ff48b0"/></pattern></defs>
+        <path d="M262 18c74 4 131 22 179 66 46 42 69 104 66 170-3 72-30 131-78 178-50 49-115 74-186 70-70-4-124-31-168-79C29 375 10 318 14 250c4-70 30-128 79-173C142 33 194 14 262 18z" fill="#00a95c" stroke="#0e2a1f" stroke-width="3"/>
+        <circle cx="410" cy="420" r="82" fill="url(#hd)" style="mix-blend-mode:multiply"/>
+        <g stroke="#0e2a1f" stroke-width="2.2" fill="none"><circle cx="40" cy="40" r="10"/><path d="M22 40h36M40 22v36"/><circle cx="480" cy="480" r="10"/><path d="M462 480h36M480 462v36"/></g>
+        <path d="M70 120c40-30 80-44 130-46" fill="none" stroke="#0e2a1f" stroke-width="2.4" stroke-dasharray="7 7"/>
+        <path d="M120 460c60 18 140 16 200-8" fill="none" stroke="#0e2a1f" stroke-width="2.4" stroke-dasharray="7 7"/>
+      </svg>
+      <div class="mark"><div class="plate"><img src="assets/duo-clone-icon.webp" width="240" height="240" alt="" fetchpriority="high"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="notes-title" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 id="notes-title">Developer notes</h2>
+        <p>How an Android app cloner works underneath: the platform rules it lives by, where its limits are, and what changed in each Android release.</p>
+      </div>
+      <a class="more" href="notes/">All notes {{ICON_ARROW}}</a>
+    </div>
+    {{NOTES_GRID}}
+  </div>
+</section>
+
+<section class="section" aria-labelledby="release-title" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="release-title">Latest release</h2>
+      <a class="more" href="changelog/">Full changelog {{ICON_ARROW}}</a>
+    </div>
+    {{RELEASE_STRIP}}
+  </div>
+</section>
+
+<section class="section" aria-labelledby="features-title" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 id="features-title">What Duo Clone does</h2>
+        <p>Clone an app you already use, sign in with a second account in the copy, and keep your work and personal accounts apart.</p>
+      </div>
+    </div>
+    <ul class="features sheet">
+      <li>{{F_COPY}}<div><b>Clones apps you already have</b><span>Use two accounts or more of the same app at the same time.</span></div></li>
+      <li>{{F_ACCOUNT}}<div><b>Groups copies by Account</b><span>Apps in the same Account share one Google sign-in.</span></div></li>
+      <li>{{F_LOCK}}<div><b>Private Space</b><span>Hides copies behind a fingerprint or PIN lock.</span></div></li>
+      <li>{{F_BACKUP}}<div><b>Encrypted backup</b><span>Backs up a copy to a password-protected file and restores it later.</span></div></li>
+      <li>{{F_METER}}<div><b>Memory and storage per copy</b><span>Force stop a copy or clear its cache.</span></div></li>
+      <li>{{F_BUBBLE}}<div><b>Quick switch</b><span>Move between running copies from a quiet notification or a floating bubble.</span></div></li>
+      <li>{{F_EDIT}}<div><b>Custom icon and name</b><span>Keep a copy private on your home screen.</span></div></li>
+      <li>{{F_GLOBE}}<div><b>23 languages</b><span>With light and dark themes.</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section band-ink" aria-labelledby="limits-title">
+  <div class="wrap">
+    <h2 id="limits-title">Good to know before you clone</h2>
+    <ul>
+      <li>Apps that ask not to run in a virtual space cannot be cloned, including many banking and payment apps. <a href="notes/require-secure-env/">Why apps opt out</a>.</li>
+      <li>Copies keep your accounts apart, but they share one Android user ID: separate logins, not a security sandbox. <a href="notes/how-app-copies-stay-separate/">Where the limits are</a>.</li>
+      <li>Private Space hides copies from other people who use your phone. It does not protect against harmful apps.</li>
+      <li>Some apps may not work fully inside a copy. Turn on crash reports in Settings to help us fix them.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="guides-title">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 id="guides-title">Guides on the Duo Clone website</h2>
+        <p>Short, practical answers for the questions people ask before they clone an app, on the <a href="https://duoclone.com/">Duo Clone website</a>.</p>
+      </div>
+    </div>
+    <ul class="tickets">
+      <li><a href="https://duoclone.com/app-cloner/">How the Duo Clone app cloner works</a><span>What a copy is, what it keeps apart and what it cannot do.</span>{{ICON_ARROW}}</li>
+      <li><a href="https://duoclone.com/multiple-accounts/">Running multiple accounts on one phone</a><span>Two accounts of one app, both signed in at the same time.</span>{{ICON_ARROW}}</li>
+      <li><a href="https://duoclone.com/dual-app/">Dual apps on Android</a><span>Why a copy of an app is useful, and how it stays signed in.</span>{{ICON_ARROW}}</li>
+      <li><a href="https://duoclone.com/blog/dual-messenger-samsung/">Dual Messenger on Samsung</a><span>What Samsung's built-in option does, and when a cloner fits better.</span>{{ICON_ARROW}}</li>
+      <li><a href="https://duoclone.com/blog/second-space-vs-dual-apps/">Second Space vs Dual apps</a><span>A separate profile versus a copy of one app, on Xiaomi phones.</span>{{ICON_ARROW}}</li>
+      <li><a href="https://duoclone.com/blog/app-cloner-apk/">App cloner APK or Google Play</a><span>Why the source matters when you pick a cloner.</span>{{ICON_ARROW}}</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section band-green" aria-labelledby="feedback-title">
+  <div class="wrap">
+    <div>
+      <h2 id="feedback-title">Found a problem or have an idea?</h2>
+      <p>Open an issue on GitHub. Please name your phone model, your Android version and the app you were cloning. Read how your data is handled in the <a href="https://duoclone.com/privacy/">Duo Clone privacy policy</a>.</p>
+    </div>
+    <div class="actions">
+      <a class="btn ink" href="https://github.com/XLABCOMPANY/duoclone/issues">{{ICON_GITHUB}} Open an issue</a>
+      <a class="more" href="https://xlabcompany.com/" style="border-color:var(--ink)">Developed by XLAB {{ICON_ARROW}}</a>
+    </div>
+  </div>
+</section>

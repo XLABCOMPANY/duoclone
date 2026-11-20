@@ -1,0 +1,66 @@
+{
+  "path": "notes/microg-in-an-app-cloner/",
+  "kind": "note",
+  "title": "Shipping microG in an App Cloner: Licence and Accounts",
+  "h1": "Shipping microG inside an app cloner: licence, Accounts and limits",
+  "description": "Duo Clone bundles microG, the Apache 2.0 reimplementation of Google sign-in services. How we credit it, what we changed, and how Account spaces use it.",
+  "card": "Why an app cloner needs microG, what the Apache 2.0 licence asks of anyone who ships it, and how Duo Clone gives each Account its own Google sign-in.",
+  "published": "2026-11-20",
+  "cover": "microg-account-spaces.svg",
+  "coverAlt": "Three Account spaces drawn as rounded frames, each holding app copies and one key for its sign-in, beside an Apache 2.0 licence sheet",
+  "caption": "Each Account has its own sign-in. The licence sheet travels with the app.",
+  "readMinutes": 6
+}
+---
+<p class="answer"><strong>Duo Clone includes microG GmsCore, an open-source reimplementation of Google's sign-in and related services that the microG Project Team publishes under the Apache License 2.0.</strong> It is built from an official microG release with two packaging changes, credited in the app's Open-source licenses screen with the full licence text. Each Duo Clone Account gets its own microG setup, which is why copies in one Account share a single Google sign-in.</p>
+
+<p>This note covers why an app cloner needs microG at all, what Apache 2.0 asks of anyone who ships it, how Duo Clone meets those terms, and what microG does not do inside a copy.</p>
+
+<h2 id="what-is-microg">What is microG?</h2>
+<p><strong>microG is a free, open-source project that reimplements the Google Play services that Android apps call for sign-in and related features.</strong> Its main component, GmsCore, is developed in the open at <a href="https://github.com/microg/GmsCore">github.com/microg/GmsCore</a> by the microG Project Team, under the Apache License 2.0. The microG project publishes tagged releases there with a checksum and a signature from the project team.</p>
+<p>microG is not a Google product, and Duo Clone is not part of the microG project. We use it as published, under its licence.</p>
+
+<h2 id="why-a-cloner-needs-it">Why does an app cloner need microG?</h2>
+<p><strong>Apps that offer "Sign in with Google" ask the phone's Google services to handle that step, and a copy needs something inside the cloner to answer.</strong> A copy runs inside Duo Clone rather than as a normal install. Duo Clone gives the copy microG to answer those sign-in requests, separately from the Google account the phone itself uses.</p>
+<p>The other route some cloners take is to rebuild the app as a new package with a new signing certificate. That changes the certificate the app was published with, and Google sign-in can check that certificate, so certificate-dependent features stop working. Duo Clone runs the app that is already installed, so the app keeps its original certificate, and microG covers the sign-in step. The user-facing walk-through of this, with the setup screen, is on the Duo Clone website under <a href="https://duoclone.com/blog/google-sign-in-cloned-apps/">signing in with a second Google account in a copy</a>.</p>
+
+<h2 id="licence-terms">What does Apache 2.0 ask of an app that ships microG?</h2>
+<p><strong>Section 4 of the Apache License 2.0 sets four conditions on redistribution: give recipients a copy of the licence, mark files you changed, keep the original notices, and pass on any NOTICE attributions.</strong> In the licence's own words, you must:</p>
+<ol>
+<li>"give any other recipients of the Work or Derivative Works a copy of this License";</li>
+<li>"cause any modified files to carry prominent notices stating that You changed the files";</li>
+<li>"retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices";</li>
+<li>include a readable copy of the attribution notices from a NOTICE file, if the work has one, in a NOTICE file, the documentation, or a display the software shows where third-party notices normally appear.</li>
+</ol>
+<p>The licence also lets you add your own copyright statement for your changes, as long as the use of the original work still follows its terms.</p>
+
+<h2 id="how-duo-clone-credits-it">How does Duo Clone meet those terms?</h2>
+<p><strong>Duo Clone credits microG in its Open-source licenses screen, ships the full Apache 2.0 text inside the app, and says exactly what was changed.</strong> The entry reads "microG GmsCore", with the copyright line "Copyright © microG Project Team", a <em>Source code</em> link to the microG repository and a <em>Read full license</em> button. The licence text is stored inside the app, so it opens offline.</p>
+<p>The same entry lists the changes: Duo Clone is built from the official microG release, and "unused x86/x86_64 native libraries and the original signature files were removed to reduce app size". Duo Clone is built for ARM phones, so the x86 libraries were never loaded. The signature files no longer matched once those libraries were removed. The microG source code itself is not modified.</p>
+<p>One step happens before any of that: the release file is checked against the checksum and the microG Project Team's signature published with it, so the app ships the release microG published and nothing else.</p>
+
+<h2 id="account-spaces">How do Duo Clone Accounts use microG?</h2>
+<p><strong>Each Account in Duo Clone is a separate space with its own microG setup, so apps in the same Account share one Google sign-in and apps in different Accounts sign in separately.</strong> The setup sheet says it in one line: "Each Account is a separate space; apps in the same Account share Google sign-in."</p>
+<p>From that follow the rules people meet in practice:</p>
+<ul>
+<li>Two copies that should use the same Google account go in the same Account, and you sign in once.</li>
+<li>A copy that needs a different Google account goes in a new Account.</li>
+<li>An Account holds one copy of a given app, so a second copy of the same app always lands in another Account, with its own sign-in.</li>
+</ul>
+<p>Each Account's microG data stays in that Account's space. As with every copy, that is separation kept by Duo Clone, not by the kernel; <a href="../how-app-copies-stay-separate/">how app copies stay separate</a> explains the limits.</p>
+
+<h2 id="what-it-does-not-do">What does microG not do inside a copy?</h2>
+<p><strong>Duo Clone's microG does not include DroidGuard and does not call Play Integrity or SafetyNet, so an app that insists on Google's device attestation can refuse to run in a copy.</strong> That is a deliberate choice: Duo Clone does not try to make a copy look like a certified original.</p>
+<p>Banking and wallet apps usually fall in that group, and many also declare <a href="../require-secure-env/">REQUIRE_SECURE_ENV</a>, which Duo Clone honours by refusing to clone them. Sign-in also depends on the app: the sign-in screens come from the app and from microG, and wording can differ from one app to the next.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If you ship microG or any other Apache 2.0 component, put the licence text in the app, keep the copyright line, and write down every change, however small.</strong> A licences screen that people can open offline, with a link to the source, covers the first three conditions in one place. For microG in particular, take the official tagged release and verify it before it enters your build.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>microG Project, <a href="https://github.com/microg/GmsCore">GmsCore source code and releases</a> on GitHub (read 20 November 2026).</li>
+<li>Apache Software Foundation, <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>, section 4 (read 20 November 2026).</li>
+<li>Duo Clone app: Open-source licenses screen and Account setup sheet, in the build released on 20 November 2026 (version 0.1.24).</li>
+</ul>
+</section>

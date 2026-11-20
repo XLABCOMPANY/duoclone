@@ -1,0 +1,74 @@
+{
+  "path": "notes/android-15-16-app-cloners/",
+  "kind": "note",
+  "title": "What Android 15 and 16 Changed for App Cloners",
+  "h1": "What Android 15 and 16 changed for app cloners",
+  "description": "Edge-to-edge with no opt-out, predictive back and stricter services: what Android 15 and 16 changed for app cloners, and what Duo Clone fixed in 0.1.19–0.1.24.",
+  "card": "Edge-to-edge with no way out, predictive back, and the copy-specific bugs Duo Clone fixed on the newest Android versions, release by release.",
+  "published": "2026-11-20",
+  "cover": "android-15-16-insets.svg",
+  "coverAlt": "Phone outline with status and navigation bars, an older app card sliding under the bars in pink and sitting inside them in green, labelled API 35 and API 36",
+  "caption": "Edge-to-edge is decided by target API level. A copy runs inside an app that targets a current one.",
+  "readMinutes": 6
+}
+---
+<p class="answer"><strong>Android 15 and 16 changed app cloners in two ways: rules tied to an app's target API level got stricter, and edge-to-edge drawing can no longer be switched off once an app targets Android 16.</strong> A copy runs inside the cloner, so it is the cloner's target level that counts, not the cloned app's. Duo Clone versions 0.1.19 to 0.1.24 fixed the visible results: system bars over older apps, stalled text fields, the Contacts spinner and camera saves.</p>
+
+<p>This note walks through the platform changes that matter for any app cloner, then lists what changed in Duo Clone, version by version, using only what the <a href="../../changelog/">changelog</a> records.</p>
+
+<h2 id="why-target-level">Why does the target API level matter more in a cloner?</h2>
+<p><strong>Many Android behaviour changes apply only to apps that target a given API level, and in a cloner the app that owns the process is the cloner itself.</strong> Google's behaviour-change pages split changes into two kinds: those that reach every app on a new Android version, and those that apply only once an app targets that version.</p>
+<p>A normally installed app written years ago keeps its old behaviour until its developer raises the target. A copy of that same app runs inside Duo Clone, which targets a current API level. Rules written for modern apps can therefore reach an old app the moment it runs as a copy, and the cloner has to cover the gap. Edge-to-edge is the clearest example.</p>
+
+<h2 id="edge-to-edge">What did edge-to-edge enforcement change?</h2>
+<p><strong>From Android 15, apps that target API level 35 are drawn edge to edge by default: their content extends behind the status bar and the navigation bar.</strong> Google's Android 15 page calls this a breaking change and warns that, if an app is not already edge to edge, portions of it may be obscured unless it handles window insets.</p>
+<p>Android 16 removes the way out. For apps that target API level 36, the attribute <code>windowOptOutEdgeToEdgeEnforcement</code> is deprecated and disabled on Android 16 devices, so the app cannot opt out. On an Android 15 device the attribute still works for those apps.</p>
+<p>For a cloner this lands in a predictable place. An app built before edge-to-edge never had to make room for the bars, but as a copy it ran under a host that is edge to edge. <strong>Duo Clone 0.1.19 fixed this: clones of older apps no longer draw under the status bar and the navigation bar on Android 15 and later.</strong> Version 0.1.20 applied the same care to Duo Clone's own overlays, so the clone badge and the quick-switch bubble no longer sit under the system bars.</p>
+
+<h2 id="predictive-back">What changed for the back gesture?</h2>
+<p><strong>For apps that target Android 16 and run on Android 16 or later, the predictive back animations are on by default, <code>onBackPressed</code> is not called and <code>KEYCODE_BACK</code> is no longer dispatched.</strong> These are the back-to-home, cross-task and cross-activity animations. Apps that intercept the back event without migrating have to move to the supported back navigation APIs, or opt out for now with <code>android:enableOnBackInvokedCallback="false"</code>.</p>
+<p>This is a platform change worth knowing about for any app that hosts other apps. It shares the edge-to-edge pattern: the behaviour is chosen by target level, and an older app can meet it through its host.</p>
+
+<h2 id="large-screens">What changed on large screens?</h2>
+<p><strong>For apps that target Android 16, the system ignores orientation, resizability and aspect-ratio restrictions on large screens, those with a smallest width of at least 600dp.</strong> An app locked to portrait fills the window in the user's preferred orientation instead of being letterboxed. Google lists the affected manifest attributes and API calls, such as <code>screenOrientation</code> and <code>setRequestedOrientation()</code>, and exempts games, identified by the <code>android:appCategory</code> flag.</p>
+<p>On a phone this rarely shows. On a tablet or a foldable it is one more case where a copy can look different from the original install, for the same target-level reason.</p>
+
+<h2 id="what-duo-clone-fixed">What did Duo Clone fix for Android 15, 16 and 17?</h2>
+<p><strong>Between 19 and 20 November 2026, versions 0.1.19 to 0.1.24 fixed these copy problems on the newest Android versions:</strong></p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Version</th><th>Android</th><th>What changed in copies</th></tr></thead>
+<tbody>
+<tr><td>0.1.19</td><td>15 and later</td><td>Clones of older apps no longer draw under the status bar and the navigation bar.</td></tr>
+<tr><td>0.1.20</td><td>15 and 16</td><td>Typing is smoother: text fields no longer stall for a few seconds when tapped, and the keyboard works with them.</td></tr>
+<tr><td>0.1.20</td><td>16</td><td>The Contacts app in a clone no longer stays on a loading spinner.</td></tr>
+<tr><td>0.1.20</td><td>All</td><td>The clone badge and the quick-switch bubble no longer sit under the system bars.</td></tr>
+<tr><td>0.1.23</td><td>16</td><td>Fixed a freeze the first time a clone that uses Google sign-in opened.</td></tr>
+<tr><td>0.1.23</td><td>16 and 17</td><td>Camera clones can save photos.</td></tr>
+<tr><td>0.1.23</td><td>16 and 17</td><td>The missing-permission notice comes back as a dialog with the clone's name when you return to Duo Clone.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Several of these share one root: on recent versions, system services look more closely at which installed app a request comes from. In a copy, the app on screen and the app Android sees are not the same, so each such check is a place where the cloner has to keep the copy working without pretending to be something it is not.</p>
+
+<h2 id="older-versions">Do the older Android versions still matter?</h2>
+<p><strong>Yes. Duo Clone runs copies on Android 6 through 16, and the oldest versions need their own fixes.</strong> In the same releases, 0.1.21 fixed connection errors on Android 6 and 7.0, and made camera clones on Android 9 and older save a photo and stay open instead of closing about ten seconds later.</p>
+<p>That range is the practical cost of a cloner: every new Android version adds target-level rules to cover, and the old versions do not go away. For a plain-language overview of what Duo Clone does on each of them, see <a href="https://duoclone.com/app-cloner/">how the Duo Clone cloner works on Android 6 to 16</a>.</p>
+
+<h2 id="for-developers">What should app developers take from this?</h2>
+<p><strong>If your app is used in copies, test it the way it will run there: under a host that targets the current API level.</strong> In practice, three checks catch most of the issues above:</p>
+<ol>
+<li>Handle window insets even if you target an older API level, so your layout survives edge-to-edge.</li>
+<li>Move back handling to <code>OnBackPressedDispatcher</code> or <code>OnBackInvokedCallback</code> rather than overriding <code>onBackPressed</code>.</li>
+<li>Let your layouts resize on large screens instead of relying on a fixed orientation.</li>
+</ol>
+<p>All three are what Google already asks of apps that target Android 16, so they are worth doing whether or not anyone ever clones your app.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Android Developers, <a href="https://developer.android.com/about/versions/15/behavior-changes-15">Behavior changes: apps targeting Android 15 or higher</a> (page last updated 28 October 2026, read 20 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/about/versions/16/behavior-changes-16">Behavior changes: apps targeting Android 16 or higher</a> (page last updated 28 October 2026, read 20 November 2026).</li>
+<li>Duo Clone behaviour: <a href="../../changelog/">changelog</a>, versions 0.1.19 to 0.1.24.</li>
+</ul>
+</section>

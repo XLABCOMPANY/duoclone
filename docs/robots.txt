@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xlabcompany.github.io/duoclone/sitemap.xml

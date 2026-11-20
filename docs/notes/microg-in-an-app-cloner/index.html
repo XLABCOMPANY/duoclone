@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shipping microG in an App Cloner: Licence and Accounts</title>
+<meta name="description" content="Duo Clone bundles microG, the Apache 2.0 reimplementation of Google sign-in services. How we credit it, what we changed, and how Account spaces use it.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/microg-in-an-app-cloner/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fbfbf8">
+<meta name="author" content="XLAB">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Duo Clone developer page">
+<meta property="og:title" content="Shipping microG in an App Cloner: Licence and Accounts">
+<meta property="og:description" content="Duo Clone bundles microG, the Apache 2.0 reimplementation of Google sign-in services. How we credit it, what we changed, and how Account spaces use it.">
+<meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/microg-in-an-app-cloner/">
+<meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/microg-in-an-app-cloner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three Account spaces drawn as rounded frames, each holding app copies and one key for its sign-in, beside an Apache 2.0 licence sheet">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shipping microG in an App Cloner: Licence and Accounts">
+<meta name="twitter:description" content="Duo Clone bundles microG, the Apache 2.0 reimplementation of Google sign-in services. How we credit it, what we changed, and how Account spaces use it.">
+<meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/microg-in-an-app-cloner.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/be-vietnam-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="sitemap" type="application/xml" href="https://xlabcompany.github.io/duoclone/sitemap.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://xlabcompany.com/#organization",
+   "name": "XLAB",
+   "url": "https://xlabcompany.com/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://xlabcompany.github.io/duoclone/#website",
+   "url": "https://xlabcompany.github.io/duoclone/",
+   "name": "Duo Clone developer page",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   }
+  },
+  {
+   "@type": "MobileApplication",
+   "@id": "https://duoclone.com/#app",
+   "name": "Duo Clone",
+   "operatingSystem": "Android",
+   "applicationCategory": "UtilitiesApplication",
+   "url": "https://duoclone.com/",
+   "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
+   "image": "https://xlabcompany.github.io/duoclone/assets/icon-512.png",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "sameAs": [
+    "https://github.com/XLABCOMPANY/duoclone"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://xlabcompany.github.io/duoclone/notes/microg-in-an-app-cloner/#article",
+   "headline": "Shipping microG inside an app cloner: licence, Accounts and limits",
+   "description": "Duo Clone bundles microG, the Apache 2.0 reimplementation of Google sign-in services. How we credit it, what we changed, and how Account spaces use it.",
+   "datePublished": "2026-11-20",
+   "dateModified": "2026-11-20",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "image": "https://xlabcompany.github.io/duoclone/og/microg-in-an-app-cloner.png",
+   "mainEntityOfPage": "https://xlabcompany.github.io/duoclone/notes/microg-in-an-app-cloner/",
+   "isPartOf": {
+    "@id": "https://xlabcompany.github.io/duoclone/#website"
+   },
+   "about": {
+    "@id": "https://duoclone.com/#app"
+   },
+   "inLanguage": "en",
+   "wordCount": 1064
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://xlabcompany.github.io/duoclone/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Developer notes",
+     "item": "https://xlabcompany.github.io/duoclone/notes/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Shipping microG inside an app cloner: licence, Accounts and limits",
+     "item": "https://xlabcompany.github.io/duoclone/notes/microg-in-an-app-cloner/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/icon-192.png" width="40" height="40" alt=""><span><b>Duo Clone</b><small>Developer page by XLAB</small></span></a>
+    <nav class="nav" aria-label="Main"><a href="../.././">Home</a><a href="../../notes/" aria-current="page">Notes</a><a href="../../changelog/">Changelog</a><a href="https://github.com/XLABCOMPANY/duoclone"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.84c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a></nav>
+  </div>
+</header>
+<main id="main">
+<article>
+<header class="art-head">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../../">Home</a></li><li><a href="../">Developer notes</a></li><li aria-current="page">Shipping microG inside an app cloner</li></ol></nav>
+      <h1>Shipping microG inside an app cloner: licence, Accounts and limits</h1>
+      <p class="byline"><span>By <b><a href="https://xlabcompany.com/" rel="author">XLAB</a></b>, developer of Duo Clone</span><span class="dot"></span><time datetime="2026-11-20">20 November 2026</time><span class="dot"></span><span>6 min read</span></p>
+    </div>
+    <figure class="art-cover">
+      <img src="microg-account-spaces.svg" width="1200" height="630" alt="Three Account spaces drawn as rounded frames, each holding app copies and one key for its sign-in, beside an Apache 2.0 licence sheet" fetchpriority="high">
+      <figcaption>Each Account has its own sign-in. The licence sheet travels with the app.</figcaption>
+    </figure>
+  </div>
+</header>
+<div class="art-body">
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+  <p>On this page</p>
+  <ol><li><a href="#what-is-microg">What is microG?</a></li><li><a href="#why-a-cloner-needs-it">Why does an app cloner need microG?</a></li><li><a href="#licence-terms">What does Apache 2.0 ask of an app that ships microG?</a></li><li><a href="#how-duo-clone-credits-it">How does Duo Clone meet those terms?</a></li><li><a href="#account-spaces">How do Duo Clone Accounts use microG?</a></li><li><a href="#what-it-does-not-do">What does microG not do inside a copy?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#what-is-microg">What is microG?</a></li><li><a href="#why-a-cloner-needs-it">Why does an app cloner need microG?</a></li><li><a href="#licence-terms">What does Apache 2.0 ask of an app that ships microG?</a></li><li><a href="#how-duo-clone-credits-it">How does Duo Clone meet those terms?</a></li><li><a href="#account-spaces">How do Duo Clone Accounts use microG?</a></li><li><a href="#what-it-does-not-do">What does microG not do inside a copy?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol></details>
+</nav>
+    <div class="prose">
+<p class="answer"><strong>Duo Clone includes microG GmsCore, an open-source reimplementation of Google's sign-in and related services that the microG Project Team publishes under the Apache License 2.0.</strong> It is built from an official microG release with two packaging changes, credited in the app's Open-source licenses screen with the full licence text. Each Duo Clone Account gets its own microG setup, which is why copies in one Account share a single Google sign-in.</p>
+
+<p>This note covers why an app cloner needs microG at all, what Apache 2.0 asks of anyone who ships it, how Duo Clone meets those terms, and what microG does not do inside a copy.</p>
+
+<h2 id="what-is-microg">What is microG?</h2>
+<p><strong>microG is a free, open-source project that reimplements the Google Play services that Android apps call for sign-in and related features.</strong> Its main component, GmsCore, is developed in the open at <a href="https://github.com/microg/GmsCore">github.com/microg/GmsCore</a> by the microG Project Team, under the Apache License 2.0. The microG project publishes tagged releases there with a checksum and a signature from the project team.</p>
+<p>microG is not a Google product, and Duo Clone is not part of the microG project. We use it as published, under its licence.</p>
+
+<h2 id="why-a-cloner-needs-it">Why does an app cloner need microG?</h2>
+<p><strong>Apps that offer "Sign in with Google" ask the phone's Google services to handle that step, and a copy needs something inside the cloner to answer.</strong> A copy runs inside Duo Clone rather than as a normal install. Duo Clone gives the copy microG to answer those sign-in requests, separately from the Google account the phone itself uses.</p>
+<p>The other route some cloners take is to rebuild the app as a new package with a new signing certificate. That changes the certificate the app was published with, and Google sign-in can check that certificate, so certificate-dependent features stop working. Duo Clone runs the app that is already installed, so the app keeps its original certificate, and microG covers the sign-in step. The user-facing walk-through of this, with the setup screen, is on the Duo Clone website under <a href="https://duoclone.com/blog/google-sign-in-cloned-apps/">signing in with a second Google account in a copy</a>.</p>
+
+<h2 id="licence-terms">What does Apache 2.0 ask of an app that ships microG?</h2>
+<p><strong>Section 4 of the Apache License 2.0 sets four conditions on redistribution: give recipients a copy of the licence, mark files you changed, keep the original notices, and pass on any NOTICE attributions.</strong> In the licence's own words, you must:</p>
+<ol>
+<li>"give any other recipients of the Work or Derivative Works a copy of this License";</li>
+<li>"cause any modified files to carry prominent notices stating that You changed the files";</li>
+<li>"retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices";</li>
+<li>include a readable copy of the attribution notices from a NOTICE file, if the work has one, in a NOTICE file, the documentation, or a display the software shows where third-party notices normally appear.</li>
+</ol>
+<p>The licence also lets you add your own copyright statement for your changes, as long as the use of the original work still follows its terms.</p>
+
+<h2 id="how-duo-clone-credits-it">How does Duo Clone meet those terms?</h2>
+<p><strong>Duo Clone credits microG in its Open-source licenses screen, ships the full Apache 2.0 text inside the app, and says exactly what was changed.</strong> The entry reads "microG GmsCore", with the copyright line "Copyright © microG Project Team", a <em>Source code</em> link to the microG repository and a <em>Read full license</em> button. The licence text is stored inside the app, so it opens offline.</p>
+<p>The same entry lists the changes: Duo Clone is built from the official microG release, and "unused x86/x86_64 native libraries and the original signature files were removed to reduce app size". Duo Clone is built for ARM phones, so the x86 libraries were never loaded. The signature files no longer matched once those libraries were removed. The microG source code itself is not modified.</p>
+<p>One step happens before any of that: the release file is checked against the checksum and the microG Project Team's signature published with it, so the app ships the release microG published and nothing else.</p>
+
+<h2 id="account-spaces">How do Duo Clone Accounts use microG?</h2>
+<p><strong>Each Account in Duo Clone is a separate space with its own microG setup, so apps in the same Account share one Google sign-in and apps in different Accounts sign in separately.</strong> The setup sheet says it in one line: "Each Account is a separate space; apps in the same Account share Google sign-in."</p>
+<p>From that follow the rules people meet in practice:</p>
+<ul>
+<li>Two copies that should use the same Google account go in the same Account, and you sign in once.</li>
+<li>A copy that needs a different Google account goes in a new Account.</li>
+<li>An Account holds one copy of a given app, so a second copy of the same app always lands in another Account, with its own sign-in.</li>
+</ul>
+<p>Each Account's microG data stays in that Account's space. As with every copy, that is separation kept by Duo Clone, not by the kernel; <a href="../how-app-copies-stay-separate/">how app copies stay separate</a> explains the limits.</p>
+
+<h2 id="what-it-does-not-do">What does microG not do inside a copy?</h2>
+<p><strong>Duo Clone's microG does not include DroidGuard and does not call Play Integrity or SafetyNet, so an app that insists on Google's device attestation can refuse to run in a copy.</strong> That is a deliberate choice: Duo Clone does not try to make a copy look like a certified original.</p>
+<p>Banking and wallet apps usually fall in that group, and many also declare <a href="../require-secure-env/">REQUIRE_SECURE_ENV</a>, which Duo Clone honours by refusing to clone them. Sign-in also depends on the app: the sign-in screens come from the app and from microG, and wording can differ from one app to the next.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If you ship microG or any other Apache 2.0 component, put the licence text in the app, keep the copyright line, and write down every change, however small.</strong> A licences screen that people can open offline, with a link to the source, covers the first three conditions in one place. For microG in particular, take the official tagged release and verify it before it enters your build.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>microG Project, <a href="https://github.com/microg/GmsCore">GmsCore source code and releases</a> on GitHub (read 20 November 2026).</li>
+<li>Apache Software Foundation, <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>, section 4 (read 20 November 2026).</li>
+<li>Duo Clone app: Open-source licenses screen and Account setup sheet, in the build released on 20 November 2026 (version 0.1.24).</li>
+</ul>
+</section>
+
+    </div>
+  </div>
+</div>
+</article>
+<section class="section related" aria-labelledby="related-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="related-title">More developer notes</h2><a class="more" href="../">All notes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="notes-grid"><article class="note-card">
+  <div class="cover"><img src="../../notes/require-secure-env/secure-env-opt-out.svg" width="1200" height="630" alt="Android manifest sheet with the REQUIRE_SECURE_ENV line marked in pink, and an app card stopped at a dashed container border" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/require-secure-env/">REQUIRE_SECURE_ENV: how an Android app opts out of app cloners</a></h3>
+    <p>One manifest line tells app cloners on Google Play to leave your app alone. What it covers, how it differs from Play Integrity, and how Duo Clone honours it.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/how-app-copies-stay-separate/copies-one-uid.svg" width="1200" height="630" alt="Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 7 min read</p>
+    <h3><a href="../../notes/how-app-copies-stay-separate/">How app copies stay separate, and where the limits are</a></h3>
+    <p>Android keeps apps apart with one user ID each. Copies in a cloner share one. What keeps them apart instead, where that stops, and how profiles compare.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/android-15-16-app-cloners/android-15-16-insets.svg" width="1200" height="630" alt="Phone outline with status and navigation bars, an older app card sliding under the bars in pink and sitting inside them in green, labelled API 35 and API 36" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/android-15-16-app-cloners/">What Android 15 and 16 changed for app cloners</a></h3>
+    <p>Edge-to-edge with no way out, predictive back, and the copy-specific bugs Duo Clone fixed on the newest Android versions, release by release.</p>
+  </div>
+</article></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</p>
+    <nav aria-label="Footer">
+      <a href="../../notes/">Developer notes</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="https://duoclone.com/">duoclone.com</a>
+      <a href="https://duoclone.com/privacy/">Privacy</a>
+      <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
+      <a href="https://xlabcompany.com/">XLAB</a>
+    </nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+  var p=document.querySelector('[data-print]');
+  if(p&&'IntersectionObserver' in window){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){setTimeout(function(){p.classList.add('in')},120);o.disconnect();}})},{threshold:.4});o.observe(p);}else if(p){p.classList.add('in');}
+  var links=[].slice.call(document.querySelectorAll('.toc > ol a'));
+  if(links.length&&'IntersectionObserver' in window){
+    var map={};links.forEach(function(a){map[a.hash.slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on');}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=document.getElementById(id);if(h)io.observe(h);});
+  }
+})();
+</script>
+</body>
+</html>
