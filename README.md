@@ -35,12 +35,10 @@ Good to know: apps that ask not to run in a virtual space cannot be cloned, incl
 
 ## Latest release
 
-**Version 0.1.25 (build 28), 20 November 2026**
+**Version 0.1.29 (build 32), 20 November 2026**
 
-- A new Add account row at the end of the By Account tab opens the app picker with the next new Account already selected.
-- The clone badge now docks on the left or right edge of the screen, keeps clear of the system bars and the camera cutout, and fades when you are not touching it.
-- Choosing a language inside the app applies it on the first tap, and notifications follow the language you chose.
-- The list and grid switch on My Clones is now an icon button; press and hold it to see its name.
+- The Add account row on the By Account tab now shows how many Accounts you are using out of how many you have, for example 1/2.
+- When every Account is in use, the row turns into a card with a lock icon, the words Account limit reached and an Enter gift code button. The new clone sheet and the message after adding several apps use the same wording.
 
 Every version, newest first: [Duo Clone changelog](https://xlabcompany.github.io/duoclone/changelog/).
 

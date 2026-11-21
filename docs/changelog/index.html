@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Duo Clone Changelog – Release Notes 0.1.19 to 0.1.25</title>
-<meta name="description" content="Release notes for Duo Clone versions 0.1.19 to 0.1.25: new color theme and icon, fixes for typing, browsers, camera and permission notices in clones.">
+<title>Duo Clone Changelog – Release Notes 0.1.19 to 0.1.29</title>
+<meta name="description" content="Release notes for Duo Clone 0.1.19 to 0.1.29: new clone badge, Account counts, update and permission fixes, new theme and icon, camera and typing fixes.">
 <link rel="canonical" href="https://xlabcompany.github.io/duoclone/changelog/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#fbfbf8">
 <meta name="author" content="XLAB">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Duo Clone developer page">
-<meta property="og:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.25">
-<meta property="og:description" content="Release notes for Duo Clone versions 0.1.19 to 0.1.25: new color theme and icon, fixes for typing, browsers, camera and permission notices in clones.">
+<meta property="og:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.29">
+<meta property="og:description" content="Release notes for Duo Clone 0.1.19 to 0.1.29: new clone badge, Account counts, update and permission fixes, new theme and icon, camera and typing fixes.">
 <meta property="og:url" content="https://xlabcompany.github.io/duoclone/changelog/">
 <meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/changelog.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.25">
+<meta property="og:image:alt" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.29">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.25">
-<meta name="twitter:description" content="Release notes for Duo Clone versions 0.1.19 to 0.1.25: new color theme and icon, fixes for typing, browsers, camera and permission notices in clones.">
+<meta name="twitter:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.29">
+<meta name="twitter:description" content="Release notes for Duo Clone 0.1.19 to 0.1.29: new clone badge, Account counts, update and permission fixes, new theme and icon, camera and typing fixes.">
 <meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/changelog.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
@@ -81,7 +81,7 @@
     "@id": "https://duoclone.com/#app"
    },
    "inLanguage": "en",
-   "dateModified": "2026-11-20"
+   "dateModified": "2026-11-21"
   },
   {
    "@type": "BreadcrumbList",
@@ -121,7 +121,19 @@
   </div>
 </section>
 <section class="section" style="padding-top:2rem" aria-label="Releases">
-  <div class="wrap"><div class="releases"><section class="release sheet" aria-labelledby="v0-1-25">
+  <div class="wrap"><div class="releases"><section class="release sheet" aria-labelledby="v0-1-29">
+  <p class="v">0.1.29<small>Build 32<br>20 November 2026</small></p>
+  <div><h2 id="v0-1-29">Version 0.1.29 (build 32)</h2><ul><li>The Add account row on the By Account tab now shows how many Accounts you are using out of how many you have, for example 1/2.</li><li>When every Account is in use, the row turns into a card with a lock icon, the words Account limit reached and an Enter gift code button. The new clone sheet and the message after adding several apps use the same wording.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-28">
+  <p class="v">0.1.28<small>Build 31<br>20 November 2026</small></p>
+  <div><h2 id="v0-1-28">Version 0.1.28 (build 31)</h2><ul><li>The Restart button for a downloaded update now always responds. If Google Play cannot install the update, the button opens the Duo Clone page on Google Play instead of doing nothing.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-27">
+  <p class="v">0.1.27<small>Build 30<br>20 November 2026</small></p>
+  <div><h2 id="v0-1-27">Version 0.1.27 (build 30)</h2><ul><li>The clone badge is now a small rounded square in the clone's color. After you drag it, it moves to the nearer side of the screen and keeps clear of the system bars, the camera cutout and the gesture areas.</li><li>Tap the clone badge to see the clone's name for a moment; screen readers read the same name.</li><li>The badge name shows the copy number only once, so a clone called Chat #2 no longer reads as Chat #2 with a second #2 after it.</li><li>The missing permission notice appears once, instead of a dialog in Duo Clone followed by a short message with the same text.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-26">
+  <p class="v">0.1.26<small>Build 29<br>20 November 2026</small></p>
+  <div><h2 id="v0-1-26">Version 0.1.26 (build 29)</h2><ul><li>Duo Clone shows its own icon on Android 6 and 7, instead of the plain Android robot.</li><li>On Android 8 to 14, the navigation bar now follows the dark mode you chose inside Duo Clone, not the phone's setting.</li><li>The missing permission notice shows even while Duo Clone is already open, and permission names always start with a capital letter.</li><li>Stop all now closes every running clone completely, without leaving an empty clone running in the background.</li><li>Vietnamese labels in the app picker and the new clone dialog are no longer cut off, and the text on green buttons is easier to read.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-25">
   <p class="v">0.1.25<small>Build 28<br>20 November 2026</small></p>
   <div><h2 id="v0-1-25">Version 0.1.25 (build 28)</h2><ul><li>A new Add account row at the end of the By Account tab opens the app picker with the next new Account already selected.</li><li>The clone badge now docks on the left or right edge of the screen, keeps clear of the system bars and the camera cutout, and fades when you are not touching it.</li><li>Choosing a language inside the app applies it on the first tap, and notifications follow the language you chose.</li><li>The list and grid switch on My Clones is now an icon button; press and hold it to see its name.</li></ul></div>
 </section><section class="release sheet" aria-labelledby="v0-1-24">

@@ -1,5 +1,45 @@
 [
   {
+    "version": "0.1.29",
+    "build": 32,
+    "date": "20 November 2026",
+    "items": [
+      "The Add account row on the By Account tab now shows how many Accounts you are using out of how many you have, for example 1/2.",
+      "When every Account is in use, the row turns into a card with a lock icon, the words Account limit reached and an Enter gift code button. The new clone sheet and the message after adding several apps use the same wording."
+    ]
+  },
+  {
+    "version": "0.1.28",
+    "build": 31,
+    "date": "20 November 2026",
+    "items": [
+      "The Restart button for a downloaded update now always responds. If Google Play cannot install the update, the button opens the Duo Clone page on Google Play instead of doing nothing."
+    ]
+  },
+  {
+    "version": "0.1.27",
+    "build": 30,
+    "date": "20 November 2026",
+    "items": [
+      "The clone badge is now a small rounded square in the clone's color. After you drag it, it moves to the nearer side of the screen and keeps clear of the system bars, the camera cutout and the gesture areas.",
+      "Tap the clone badge to see the clone's name for a moment; screen readers read the same name.",
+      "The badge name shows the copy number only once, so a clone called Chat #2 no longer reads as Chat #2 with a second #2 after it.",
+      "The missing permission notice appears once, instead of a dialog in Duo Clone followed by a short message with the same text."
+    ]
+  },
+  {
+    "version": "0.1.26",
+    "build": 29,
+    "date": "20 November 2026",
+    "items": [
+      "Duo Clone shows its own icon on Android 6 and 7, instead of the plain Android robot.",
+      "On Android 8 to 14, the navigation bar now follows the dark mode you chose inside Duo Clone, not the phone's setting.",
+      "The missing permission notice shows even while Duo Clone is already open, and permission names always start with a capital letter.",
+      "Stop all now closes every running clone completely, without leaving an empty clone running in the background.",
+      "Vietnamese labels in the app picker and the new clone dialog are no longer cut off, and the text on green buttons is easier to read."
+    ]
+  },
+  {
     "version": "0.1.25",
     "build": 28,
     "date": "20 November 2026",

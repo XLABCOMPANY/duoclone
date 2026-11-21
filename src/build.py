@@ -345,7 +345,7 @@ def build():
 </section>''')
     cl = {'path': 'changelog/', 'source': 'generated',
           'title': f'Duo Clone Changelog – Release Notes {releases[-1]["version"]} to {latest["version"]}',
-          'description': f'Release notes for Duo Clone versions {releases[-1]["version"]} to {latest["version"]}: new color theme and icon, fixes for typing, browsers, camera and permission notices in clones.'}
+          'description': f'Release notes for Duo Clone {releases[-1]["version"]} to {latest["version"]}: new clone badge, Account counts, update and permission fixes, new theme and icon, camera and typing fixes.'}
     body = f'''<section class="list-head">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../">Home</a></li><li aria-current="page">Changelog</li></ol></nav>
@@ -359,9 +359,9 @@ def build():
 </section>'''
     graph = [org(), website(), app(), {'@type': 'WebPage', '@id': SITE + 'changelog/#page', 'url': SITE + 'changelog/',
              'name': 'Duo Clone changelog', 'isPartOf': {'@id': WEBSITE_ID}, 'about': {'@id': APP_ID}, 'inLanguage': 'en',
-             'dateModified': '2026-11-20'}, crumbs([('Home', ''), ('Changelog', 'changelog/')])]
+             'dateModified': '2026-11-21'}, crumbs([('Home', ''), ('Changelog', 'changelog/')])]
     write('changelog/', page(cl, body, 1, graph, 'changelog.png', 'changelog/'))
-    built.append(('changelog/', '2026-11-20', 0))
+    built.append(('changelog/', '2026-11-21', 0))
 
     # Home
     home = pages['home']
@@ -369,10 +369,10 @@ def build():
                                       'LATEST_VERSION': latest['version']})
     graph = [org(), website(), app(), {'@type': 'WebPage', '@id': SITE + '#page', 'url': SITE, 'name': home['title'],
              'isPartOf': {'@id': WEBSITE_ID}, 'about': {'@id': APP_ID}, 'primaryImageOfPage': SITE + 'assets/icon-512.png',
-             'inLanguage': 'en', 'dateModified': '2026-11-20'}]
+             'inLanguage': 'en', 'dateModified': '2026-11-21'}]
     home['ogAlt'] = 'Duo Clone app icon printed in green and pink on paper, with the words Duo Clone developer page'
     write('', page(home, body, 0, graph, 'home.png', ''))
-    built.append(('', '2026-11-20', 0))
+    built.append(('', '2026-11-21', 0))
 
     # 404
     nf = {'path': '404.html', 'source': 'generated', 'title': 'Page not found – Duo Clone developer page',
