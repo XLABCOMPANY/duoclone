@@ -35,10 +35,9 @@ Good to know: apps that ask not to run in a virtual space cannot be cloned, incl
 
 ## Latest release
 
-**Version 0.1.29 (build 32), 20 November 2026**
+**Version 0.1.30 (build 33), 21 November 2026**
 
-- The Add account row on the By Account tab now shows how many Accounts you are using out of how many you have, for example 1/2.
-- When every Account is in use, the row turns into a card with a lock icon, the words Account limit reached and an Enter gift code button. The new clone sheet and the message after adding several apps use the same wording.
+- If Duo Clone cannot check your Accounts online, for example right after you install it without a connection, it now uses the standard Account limit until it can check.
 
 Every version, newest first: [Duo Clone changelog](https://xlabcompany.github.io/duoclone/changelog/).
 

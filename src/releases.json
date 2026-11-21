@@ -1,5 +1,13 @@
 [
   {
+    "version": "0.1.30",
+    "build": 33,
+    "date": "21 November 2026",
+    "items": [
+      "If Duo Clone cannot check your Accounts online, for example right after you install it without a connection, it now uses the standard Account limit until it can check."
+    ]
+  },
+  {
     "version": "0.1.29",
     "build": 32,
     "date": "20 November 2026",
