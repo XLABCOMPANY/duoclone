@@ -6,6 +6,7 @@
   "description": "Duo Clone bundles microG, the Apache 2.0 reimplementation of Google sign-in services. How we credit it, what we changed, and how Account spaces use it.",
   "card": "Why an app cloner needs microG, what the Apache 2.0 licence asks of anyone who ships it, and how Duo Clone gives each Account its own Google sign-in.",
   "published": "2026-11-20",
+  "modified": "2026-11-27",
   "cover": "microg-account-spaces.svg",
   "coverAlt": "Three Account spaces drawn as rounded frames, each holding app copies and one key for its sign-in, beside an Apache 2.0 licence sheet",
   "caption": "Each Account has its own sign-in. The licence sheet travels with the app.",
@@ -47,6 +48,7 @@
 <li>A copy that needs a different Google account goes in a new Account.</li>
 <li>An Account holds one copy of a given app, so a second copy of the same app always lands in another Account, with its own sign-in.</li>
 </ul>
+<p><strong>Since version 0.1.35, a copy that starts "Sign in with Google" gets a list from Duo Clone itself, titled Choose a Google account, with the Google accounts of that Account and an Add another account row.</strong> Picking one completes the sign-in with that Account's microG data. Add another account opens Android's add-account screen for Google, and when the Account has no Google account yet, that screen opens straight away.</p>
 <p>Each Account's microG data stays in that Account's space. As with every copy, that is separation kept by Duo Clone, not by the kernel; <a href="../how-app-copies-stay-separate/">how app copies stay separate</a> explains the limits.</p>
 
 <h2 id="what-it-does-not-do">What does microG not do inside a copy?</h2>
@@ -62,5 +64,6 @@
 <li>microG Project, <a href="https://github.com/microg/GmsCore">GmsCore source code and releases</a> on GitHub (read 20 November 2026).</li>
 <li>Apache Software Foundation, <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>, section 4 (read 20 November 2026).</li>
 <li>Duo Clone app: Open-source licenses screen and Account setup sheet, in the build released on 20 November 2026 (version 0.1.24).</li>
+<li>Duo Clone app: the Choose a Google account list, in version 0.1.35 (21 November 2026); see the <a href="../../changelog/#v0-1-35">changelog</a>.</li>
 </ul>
 </section>

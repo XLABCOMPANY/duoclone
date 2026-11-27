@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Duo Clone Changelog – Release Notes 0.1.19 to 0.1.30</title>
-<meta name="description" content="Release notes for Duo Clone 0.1.19 to 0.1.30: new clone badge, Account counts, update and permission fixes, new theme and icon, camera and typing fixes.">
+<title>Duo Clone Changelog – Release Notes 0.1.19 to 0.1.37</title>
+<meta name="description" content="Release notes for Duo Clone 0.1.19 to 0.1.37: Clear data, closed-clone notifications, Google sign-in in copies, large backups, badge menu, new theme.">
 <link rel="canonical" href="https://xlabcompany.github.io/duoclone/changelog/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#fbfbf8">
 <meta name="author" content="XLAB">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Duo Clone developer page">
-<meta property="og:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.30">
-<meta property="og:description" content="Release notes for Duo Clone 0.1.19 to 0.1.30: new clone badge, Account counts, update and permission fixes, new theme and icon, camera and typing fixes.">
+<meta property="og:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.37">
+<meta property="og:description" content="Release notes for Duo Clone 0.1.19 to 0.1.37: Clear data, closed-clone notifications, Google sign-in in copies, large backups, badge menu, new theme.">
 <meta property="og:url" content="https://xlabcompany.github.io/duoclone/changelog/">
 <meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/changelog.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.30">
+<meta property="og:image:alt" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.37">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.30">
-<meta name="twitter:description" content="Release notes for Duo Clone 0.1.19 to 0.1.30: new clone badge, Account counts, update and permission fixes, new theme and icon, camera and typing fixes.">
+<meta name="twitter:title" content="Duo Clone Changelog – Release Notes 0.1.19 to 0.1.37">
+<meta name="twitter:description" content="Release notes for Duo Clone 0.1.19 to 0.1.37: Clear data, closed-clone notifications, Google sign-in in copies, large backups, badge menu, new theme.">
 <meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/changelog.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
@@ -81,7 +81,7 @@
     "@id": "https://duoclone.com/#app"
    },
    "inLanguage": "en",
-   "dateModified": "2026-11-21"
+   "dateModified": "2026-11-27"
   },
   {
    "@type": "BreadcrumbList",
@@ -121,7 +121,28 @@
   </div>
 </section>
 <section class="section" style="padding-top:2rem" aria-label="Releases">
-  <div class="wrap"><div class="releases"><section class="release sheet" aria-labelledby="v0-1-30">
+  <div class="wrap"><div class="releases"><section class="release sheet" aria-labelledby="v0-1-37">
+  <p class="v">0.1.37<small>Build 40<br>25 November 2026</small></p>
+  <div><h2 id="v0-1-37">Version 0.1.37 (build 40)</h2><ul><li>A copy with a lot of data now backs up. Backups are written in pieces, so a copy of a few hundred megabytes no longer fails, and restore reads the file straight from where you saved it. Backup files from earlier versions still restore.</li><li>When the phone or the folder you picked is out of space, a backup or restore now says Not enough free storage for the backup and tells you to free some space and try again.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-36">
+  <p class="v">0.1.36<small>Build 39<br>24 November 2026</small></p>
+  <div><h2 id="v0-1-36">Version 0.1.36 (build 39)</h2><ul><li>Backing up a single copy now saves its data after you pick the save location. Before, the file could come out empty.</li><li>In the Google Play version, Incognito mode disguises Duo Clone as Toolbox, Planner or Shapes with plain icons, and the switch now works there. The APK build that XLAB distributes outside Google Play keeps Calculator, Weather and Notes.</li><li>With the Neutral notification switch on, the running notification shows Duo Clone without the number of clones, and it stays hidden on the lock screen.</li><li>Duo Clone's own background services now declare the kind of work they do, as Android 14 and later require: keeping copies running and receiving push messages are declared as special use, and backup and restore as data sync.</li><li>The Google Play version no longer declares permissions that copies never needed, such as payment, companion-device and system-settings permissions.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-35">
+  <p class="v">0.1.35<small>Build 38<br>21 November 2026</small></p>
+  <div><h2 id="v0-1-35">Version 0.1.35 (build 38)</h2><ul><li>Sign in with Google now works inside a copy. Duo Clone shows a list titled Choose a Google account with the Google accounts of that Account and an Add another account row.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-34">
+  <p class="v">0.1.34<small>Build 37<br>21 November 2026</small></p>
+  <div><h2 id="v0-1-34">Version 0.1.34 (build 37)</h2><ul><li>Tap the clone badge to open a small menu. It shows the clone's name and Account, then Open Duo Clone, Close clone and Hide badge. Hide badge removes the mark until you open the clone again.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-33">
+  <p class="v">0.1.33<small>Build 36<br>21 November 2026</small></p>
+  <div><h2 id="v0-1-33">Version 0.1.33 (build 36)</h2><ul><li>A new switch in Settings, Notifications from closed clones, is off by default. When it is on, Duo Clone keeps one silent notification and apps in your copies receive their messages while they are closed. It uses some extra battery.</li><li>Notifications from a copy now carry the clone's name and number: the header reads Duo Clone, then the app and Clone #1, and the clone's name comes before the title.</li><li>Apps in copies can now receive push messages while they run and run their scheduled background work, which apps use for notifications and sync.</li><li>Apps that start part of themselves in a separate process, such as a chat app's widget engine, no longer close when you open them in a copy.</li><li>Sign-in flows that pass through a web page, as in some social apps, now come back to the copy instead of leaving it, and apps that wait for background work to end finish it the way Android does, so logging out no longer hangs.</li><li>Passwords an app offers to save in a copy are kept for that copy only, encrypted, and offered back with a Sign in with a saved login? prompt. Passkeys do not work in copies, and Duo Clone says so when you start one.</li><li>The dimmed clone badge is easier to see: it fades to 60 percent instead of 35 percent and has a white outline and a shadow.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-32">
+  <p class="v">0.1.32<small>Build 35<br>21 November 2026</small></p>
+  <div><h2 id="v0-1-32">Version 0.1.32 (build 35)</h2><ul><li>Fingerprint and face prompts now work inside copies of apps that use them. Before, the prompt never appeared in a copy.</li><li>Clear data, in the copy's menu next to Delete clone, resets one copy to like new after you confirm. The copy, its name, icon and lock stay, and so does the shared Google account of the Account. Logins inside the copy are removed.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-31">
+  <p class="v">0.1.31<small>Build 34<br>21 November 2026</small></p>
+  <div><h2 id="v0-1-31">Version 0.1.31 (build 34)</h2><ul><li>Tablets and phones without a SIM card, a camera or other optional hardware can now install Duo Clone from Google Play. Those hardware features are no longer marked as required.</li></ul></div>
+</section><section class="release sheet" aria-labelledby="v0-1-30">
   <p class="v">0.1.30<small>Build 33<br>21 November 2026</small></p>
   <div><h2 id="v0-1-30">Version 0.1.30 (build 33)</h2><ul><li>If Duo Clone cannot check your Accounts online, for example right after you install it without a connection, it now uses the standard Account limit until it can check.</li></ul></div>
 </section><section class="release sheet" aria-labelledby="v0-1-29">

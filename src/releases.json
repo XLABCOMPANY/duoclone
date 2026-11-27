@@ -1,5 +1,73 @@
 [
   {
+    "version": "0.1.37",
+    "build": 40,
+    "date": "25 November 2026",
+    "items": [
+      "A copy with a lot of data now backs up. Backups are written in pieces, so a copy of a few hundred megabytes no longer fails, and restore reads the file straight from where you saved it. Backup files from earlier versions still restore.",
+      "When the phone or the folder you picked is out of space, a backup or restore now says Not enough free storage for the backup and tells you to free some space and try again."
+    ]
+  },
+  {
+    "version": "0.1.36",
+    "build": 39,
+    "date": "24 November 2026",
+    "items": [
+      "Backing up a single copy now saves its data after you pick the save location. Before, the file could come out empty.",
+      "In the Google Play version, Incognito mode disguises Duo Clone as Toolbox, Planner or Shapes with plain icons, and the switch now works there. The APK build that XLAB distributes outside Google Play keeps Calculator, Weather and Notes.",
+      "With the Neutral notification switch on, the running notification shows Duo Clone without the number of clones, and it stays hidden on the lock screen.",
+      "Duo Clone's own background services now declare the kind of work they do, as Android 14 and later require: keeping copies running and receiving push messages are declared as special use, and backup and restore as data sync.",
+      "The Google Play version no longer declares permissions that copies never needed, such as payment, companion-device and system-settings permissions."
+    ]
+  },
+  {
+    "version": "0.1.35",
+    "build": 38,
+    "date": "21 November 2026",
+    "items": [
+      "Sign in with Google now works inside a copy. Duo Clone shows a list titled Choose a Google account with the Google accounts of that Account and an Add another account row."
+    ]
+  },
+  {
+    "version": "0.1.34",
+    "build": 37,
+    "date": "21 November 2026",
+    "items": [
+      "Tap the clone badge to open a small menu. It shows the clone's name and Account, then Open Duo Clone, Close clone and Hide badge. Hide badge removes the mark until you open the clone again."
+    ]
+  },
+  {
+    "version": "0.1.33",
+    "build": 36,
+    "date": "21 November 2026",
+    "items": [
+      "A new switch in Settings, Notifications from closed clones, is off by default. When it is on, Duo Clone keeps one silent notification and apps in your copies receive their messages while they are closed. It uses some extra battery.",
+      "Notifications from a copy now carry the clone's name and number: the header reads Duo Clone, then the app and Clone #1, and the clone's name comes before the title.",
+      "Apps in copies can now receive push messages while they run and run their scheduled background work, which apps use for notifications and sync.",
+      "Apps that start part of themselves in a separate process, such as a chat app's widget engine, no longer close when you open them in a copy.",
+      "Sign-in flows that pass through a web page, as in some social apps, now come back to the copy instead of leaving it, and apps that wait for background work to end finish it the way Android does, so logging out no longer hangs.",
+      "Passwords an app offers to save in a copy are kept for that copy only, encrypted, and offered back with a Sign in with a saved login? prompt. Passkeys do not work in copies, and Duo Clone says so when you start one.",
+      "The dimmed clone badge is easier to see: it fades to 60 percent instead of 35 percent and has a white outline and a shadow."
+    ]
+  },
+  {
+    "version": "0.1.32",
+    "build": 35,
+    "date": "21 November 2026",
+    "items": [
+      "Fingerprint and face prompts now work inside copies of apps that use them. Before, the prompt never appeared in a copy.",
+      "Clear data, in the copy's menu next to Delete clone, resets one copy to like new after you confirm. The copy, its name, icon and lock stay, and so does the shared Google account of the Account. Logins inside the copy are removed."
+    ]
+  },
+  {
+    "version": "0.1.31",
+    "build": 34,
+    "date": "21 November 2026",
+    "items": [
+      "Tablets and phones without a SIM card, a camera or other optional hardware can now install Duo Clone from Google Play. Those hardware features are no longer marked as required."
+    ]
+  },
+  {
     "version": "0.1.30",
     "build": 33,
     "date": "21 November 2026",

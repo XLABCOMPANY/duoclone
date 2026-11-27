@@ -11,14 +11,14 @@
 <p align="center">
   <a href="https://xlabcompany.github.io/duoclone/"><img src="https://img.shields.io/badge/developer%20page-xlabcompany.github.io%2Fduoclone-00a95c" alt="Developer page"></a>
   <img src="https://img.shields.io/badge/platform-Android%206%20to%2016-0e2a1f" alt="Platform: Android 6 to 16">
-  <img src="https://img.shields.io/badge/official%20channel-Google%20Play%20only-ff48b0" alt="Official channel: Google Play only">
+  <img src="https://img.shields.io/badge/official%20channel-Google%20Play-ff48b0" alt="Official channel: Google Play">
 </p>
 
 ---
 
 Duo Clone lets you clone an app you already use, sign in with a second account in the copy, and keep your work and personal accounts apart. It is developed by [XLAB](https://xlabcompany.com/). This repository holds the developer page, the release notes and the developer notes, and it is the place to report bugs.
 
-> **Official channel.** Google Play is the only official channel for Duo Clone; it is never offered as an APK.
+> **Official channel.** Google Play is the official channel for Duo Clone. This page does not offer an APK download.
 
 ## What Duo Clone does
 
@@ -35,9 +35,12 @@ Good to know: apps that ask not to run in a virtual space cannot be cloned, incl
 
 ## Latest release
 
-**Version 0.1.30 (build 33), 21 November 2026**
+**Version 0.1.37 (build 40), 25 November 2026**
 
-- If Duo Clone cannot check your Accounts online, for example right after you install it without a connection, it now uses the standard Account limit until it can check.
+- A copy with a lot of data now backs up. Backups are written in pieces, so a copy of a few hundred megabytes no longer fails, and restore reads the file straight from where you saved it. Backup files from earlier versions still restore.
+- When the phone or the folder you picked is out of space, a backup or restore now says Not enough free storage for the backup and tells you to free some space and try again.
+
+Since 0.1.30 you also got Clear data for a single copy, Notifications from closed clones, Sign in with Google inside copies and a menu on the clone badge.
 
 Every version, newest first: [Duo Clone changelog](https://xlabcompany.github.io/duoclone/changelog/).
 
