@@ -6,6 +6,7 @@
   "description": "Android isolates apps by user ID, and copies in an app cloner share the cloner's. How that separation works, where it stops, and how clone profiles differ.",
   "card": "Android keeps apps apart with one user ID each. Copies in a cloner share one. What keeps them apart instead, where that stops, and how profiles compare.",
   "published": "2026-11-20",
+  "modified": "2026-11-27",
   "cover": "copies-one-uid.svg",
   "coverAlt": "Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile",
   "caption": "Left: copies in one cloner share its user ID. Right: profiles are separate users, kept apart by the kernel.",
@@ -22,7 +23,7 @@
 
 <h2 id="what-changes">What changes when an app runs as a copy?</h2>
 <p><strong>A copy runs inside the cloner's own app space, so to Android it is the cloner, with the cloner's UID, permissions and storage.</strong> Duo Clone uses the app that is already installed on your phone rather than installing a second package. Android sees one app, Duo Clone, doing the work for every copy.</p>
-<p>You can see this from the outside. When a copy needs camera or location access, the permission dialog is for Duo Clone, because Duo Clone is the app Android knows. When a copy asks for a permission Duo Clone cannot grant, recent versions show one short notice instead of failing silently (changelog, versions 0.1.19 and 0.1.23). Anything a copy saves lands in Duo Clone's storage area.</p>
+<p>You can see this from the outside. When a copy needs camera or location access, the permission dialog is for Duo Clone, because Duo Clone is the app Android knows. When a copy asks for a permission Duo Clone cannot grant, recent versions show one short notice instead of failing silently (changelog, versions 0.1.19 and 0.1.23). Anything a copy saves lands in Duo Clone's storage area. The same fact reaches system checks too: Android's biometric permission check reads a user ID and a package name together, which is why <a href="../biometric-prompts-in-app-clones/">fingerprint and face prompts needed their own fix</a> inside copies.</p>
 <p>Security researchers who study cloners describe the same model: the cloned app is effectively running as the cloner, which is why you must trust the cloner with everything the copies hold.</p>
 
 <h2 id="how-duo-clone-separates">How does Duo Clone keep copies apart?</h2>

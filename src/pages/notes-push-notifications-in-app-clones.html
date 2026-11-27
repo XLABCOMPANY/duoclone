@@ -1,0 +1,59 @@
+{
+  "path": "notes/push-notifications-in-app-clones/",
+  "kind": "note",
+  "title": "Push Notifications in App Clones, Even When Closed",
+  "h1": "Push notifications in app copies, including copies you have closed",
+  "description": "How Duo Clone 0.1.33 gets push messages to apps in copies, why a closed copy needs a foreground service, and how each notification shows which copy it is from.",
+  "card": "How push messages reach an app that runs inside a cloner, why a closed copy needs an opt-in foreground service, and how notifications name the copy they belong to.",
+  "published": "2026-11-27",
+  "cover": "push-closed-clone.svg",
+  "coverAlt": "A message from the cloud reaches a running copy and a closed copy, and ends as a notification tagged with the copy's number",
+  "caption": "A running copy gets the message directly. A closed copy is started in the background so its app can post the notification.",
+  "readMinutes": 6
+}
+---
+<p class="answer"><strong>Duo Clone 0.1.33 delivers push messages to the apps in your copies, and with the opt-in setting "Notifications from closed clones" it does so even when a copy is closed, using a foreground service and one silent notification.</strong> The message goes to the copied app itself, which posts its own notification, and Duo Clone adds the copy's name and number to the title so you can tell two copies of the same app apart.</p>
+
+<p>This note explains how push works for an app that runs inside another app, why a closed copy needs a foreground service, what happens when the copy is locked, and how the scheduled background work of copied apps fits in.</p>
+
+<h2 id="how-push-reaches-a-copy">How does a push message reach an app in a copy?</h2>
+<p><strong>An app that uses Firebase Cloud Messaging receives each message in a service of its own, and in a copy that message has to be carried to the app by Duo Clone.</strong> Google's documentation describes the app side: the app extends <code>FirebaseMessagingService</code> and gets the message in <code>onMessageReceived</code>. On a normal install the phone's Google services hand the message over. Inside a copy, Duo Clone does that step, and it does not add a push server of its own: messages still travel through Google's push service, as they do for any app that uses it.</p>
+<p>While a copy is running, the message goes straight to the app in that copy. This is why version 0.1.33 lists "Apps in copies can now receive push messages while they run" as its own change. For a closed copy there is nothing to hand the message to, which is the harder case.</p>
+
+<h2 id="why-closed-copies-need-a-service">Why does a closed copy need a foreground service?</h2>
+<p><strong>Android lets an app hold a long-lived connection in the background only while it runs a foreground service with a visible notification, so receiving for closed copies means a persistent notification.</strong> Duo Clone keeps one connection for each Account while the setting is on. The notification is silent and reads "Receiving notifications for clones. Turn this off in Settings."</p>
+<p>The service uses the foreground service type <code>specialUse</code>. Android describes that type as covering "any valid foreground service use cases that aren't covered by the other foreground service types", and asks the developer to describe the use in a manifest property that is reviewed when the app is submitted. Messages for a closed copy do not fit playback, location or data transfer, so <code>specialUse</code> is the honest type. The <a href="../foreground-service-types-app-cloner/">note on foreground service types</a> covers how Duo Clone picks types for its other services.</p>
+<p>The setting is off by default, and the line under it in Settings is plain about the cost: "Keeps a silent notification so apps in clones get messages while closed. Uses some extra battery." If your phone slows down or the battery drains, <a href="https://duoclone.com/blog/cloned-apps-battery-ram/">what a second copy of an app costs in battery and memory</a> is covered in plain language on the Duo Clone website.</p>
+
+<h2 id="what-happens-to-a-closed-copy">What happens when a message arrives for a closed copy?</h2>
+<p><strong>Duo Clone starts the copy in the background, with no screen, passes the message to the app and lets the app post its own notification.</strong> The copy is then given a short time to finish, about a minute, and released if nothing else keeps it running. Google's FCM documentation is clear that <code>onMessageReceived</code> has "a short execution window" and that work which takes more than a few seconds must continue in a valid process lifecycle, so a copy that is released straight away would lose slow work.</p>
+<p>Two kinds of copy are skipped on purpose:</p>
+<ul>
+<li><strong>A locked copy.</strong> If the copy sits behind the Private Space lock, the message is not delivered while it is locked, so the content of a message cannot be read out of a notification before you unlock. This is a limit: Duo Clone makes no promise about a message that arrives while the copy is locked.</li>
+<li><strong>An app that opts out of cloners.</strong> Apps that ask not to run in a virtual space, with the manifest property described in the <a href="../require-secure-env/">REQUIRE_SECURE_ENV note</a>, are not started.</li>
+</ul>
+
+<h2 id="staying-alive">What keeps the connection alive after a restart or an update?</h2>
+<p><strong>When the setting is on, Duo Clone starts the service again after the phone boots and after Duo Clone itself is updated.</strong> An update stops a running service, and a reboot ends everything, so without this step notifications would stop silently until you opened the app. Android 15 forbids a <code>BOOT_COMPLETED</code> receiver from starting <code>dataSync</code>, <code>camera</code>, <code>mediaPlayback</code>, <code>phoneCall</code>, <code>mediaProjection</code> and <code>microphone</code> services. <code>specialUse</code> is not among them, so the push service may start at boot.</p>
+
+<h2 id="which-copy-is-it">How does a notification say which copy it is from?</h2>
+<p><strong>Duo Clone puts the copy's name and number before the notification title, for example "Chat #1 · Alex".</strong> The first version put this text in the notification's header line next to the app name. Some phone makers' interfaces do not show that header line for chat notifications, so the name moved into the title, the one text every notification shade shows. The name goes first because a long title is cut at the end. In a one-to-one chat the sender's name is the title, so the copy's name goes in front of the sender.</p>
+<p>The name is the one you gave the copy, or the app's name if you did not, followed by the copy number. Text the app sets itself is kept after the copy's name.</p>
+
+<h2 id="scheduled-work">What about scheduled background work?</h2>
+<p><strong>Version 0.1.33 also runs the scheduled jobs of apps in copies, which is how WorkManager, JobIntentService and periodic jobs keep apps in sync.</strong> Google recommends WorkManager for work that has to persist. Duo Clone schedules those jobs for real, one set per copy, and cancels them when you use Clear data or delete the copy. Jobs also end the way Android ends them, so an app that waits for its background work to finish no longer hangs when you log out.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If you build a container that runs other apps, receiving push messages is a separate feature from running them, and it needs its own consent, its own foreground service and its own rules for locked and opted-out apps.</strong> Make the always-on part opt-in, say what it costs, label every notification with the copy it belongs to, and choose the foreground service type that matches the work.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Duo Clone <a href="../../changelog/#v0-1-33">changelog, version 0.1.33</a> (21 November 2026): push messages in running copies, Notifications from closed clones, copy names in notifications, scheduled jobs.</li>
+<li>Firebase, <a href="https://firebase.google.com/docs/cloud-messaging/android/receive-messages">Receive messages in an Android app</a>: <code>FirebaseMessagingService</code>, <code>onMessageReceived</code> and its execution window (read 27 November 2026).</li>
+<li>Firebase, <a href="https://firebase.google.com/docs/cloud-messaging/android/message-priority">Set and manage Android message priority</a>: normal and high priority delivery in Doze (read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/develop/background-work/services/fgs/service-types">Foreground service types</a>: <code>specialUse</code> and its manifest property (last updated 16 November 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/about/versions/15/behavior-changes-15">Behavior changes: apps that target Android 15 or higher</a>: restrictions on <code>BOOT_COMPLETED</code> receivers launching foreground services (last updated 28 October 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/develop/background-work/background-tasks/persistent">Persistent work</a>: WorkManager (read 27 November 2026).</li>
+</ul>
+</section>

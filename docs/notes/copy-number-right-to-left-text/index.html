@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keeping the Copy Number in Order Next to Arabic Text</title>
+<meta name="description" content="Why a copy number such as #3 showed as 3# after Arabic words, the Unicode bidi rules behind it, and the left-to-right isolate Duo Clone wraps around it.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/copy-number-right-to-left-text/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fbfbf8">
+<meta name="author" content="XLAB">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Duo Clone developer page">
+<meta property="og:title" content="Keeping the Copy Number in Order Next to Arabic Text">
+<meta property="og:description" content="Why a copy number such as #3 showed as 3# after Arabic words, the Unicode bidi rules behind it, and the left-to-right isolate Duo Clone wraps around it.">
+<meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/copy-number-right-to-left-text/">
+<meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/copy-number-right-to-left-text.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A copy name in Arabic script with the number sign on the wrong side, crossed out, above the corrected name inside an isolate">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Keeping the Copy Number in Order Next to Arabic Text">
+<meta name="twitter:description" content="Why a copy number such as #3 showed as 3# after Arabic words, the Unicode bidi rules behind it, and the left-to-right isolate Duo Clone wraps around it.">
+<meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/copy-number-right-to-left-text.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/be-vietnam-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="sitemap" type="application/xml" href="https://xlabcompany.github.io/duoclone/sitemap.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://xlabcompany.com/#organization",
+   "name": "XLAB",
+   "url": "https://xlabcompany.com/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://xlabcompany.github.io/duoclone/#website",
+   "url": "https://xlabcompany.github.io/duoclone/",
+   "name": "Duo Clone developer page",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   }
+  },
+  {
+   "@type": "MobileApplication",
+   "@id": "https://duoclone.com/#app",
+   "name": "Duo Clone",
+   "operatingSystem": "Android 6.0+",
+   "applicationCategory": "UtilitiesApplication",
+   "url": "https://duoclone.com/",
+   "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
+   "image": "https://xlabcompany.github.io/duoclone/assets/icon-512.png",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "sameAs": [
+    "https://github.com/XLABCOMPANY/duoclone"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://xlabcompany.github.io/duoclone/notes/copy-number-right-to-left-text/#article",
+   "headline": "Keeping the copy number in order next to right-to-left text",
+   "description": "Why a copy number such as #3 showed as 3# after Arabic words, the Unicode bidi rules behind it, and the left-to-right isolate Duo Clone wraps around it.",
+   "datePublished": "2026-11-27",
+   "dateModified": "2026-11-27",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "image": "https://xlabcompany.github.io/duoclone/og/copy-number-right-to-left-text.png",
+   "mainEntityOfPage": "https://xlabcompany.github.io/duoclone/notes/copy-number-right-to-left-text/",
+   "isPartOf": {
+    "@id": "https://xlabcompany.github.io/duoclone/#website"
+   },
+   "about": {
+    "@id": "https://duoclone.com/#app"
+   },
+   "inLanguage": "en",
+   "wordCount": 1080
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://xlabcompany.github.io/duoclone/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Developer notes",
+     "item": "https://xlabcompany.github.io/duoclone/notes/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Keeping the copy number in order next to right-to-left text",
+     "item": "https://xlabcompany.github.io/duoclone/notes/copy-number-right-to-left-text/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/icon-192.png" width="40" height="40" alt=""><span><b>Duo Clone</b><small>Developer page by XLAB</small></span></a>
+    <nav class="nav" aria-label="Main"><a href="../.././">Home</a><a href="../../notes/" aria-current="page">Notes</a><a href="../../changelog/">Changelog</a><a href="https://github.com/XLABCOMPANY/duoclone"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.84c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a></nav>
+  </div>
+</header>
+<main id="main">
+<article>
+<header class="art-head">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../../">Home</a></li><li><a href="../">Developer notes</a></li><li aria-current="page">Keeping the copy number in order next to right-to-left text</li></ol></nav>
+      <h1>Keeping the copy number in order next to right-to-left text</h1>
+      <p class="byline"><span>By <b><a href="https://xlabcompany.com/" rel="author">XLAB</a></b>, developer of Duo Clone</span><span class="dot"></span><time datetime="2026-11-27">27 November 2026</time><span class="dot"></span><span>5 min read</span></p>
+    </div>
+    <figure class="art-cover">
+      <img src="copy-number-bidi.svg" width="1200" height="630" alt="A copy name in Arabic script with the number sign on the wrong side, crossed out, above the corrected name inside an isolate" fetchpriority="high">
+      <figcaption>Inside the isolate the number reads left to right. Around it the Arabic text keeps its own direction.</figcaption>
+    </figure>
+  </div>
+</header>
+<div class="art-body">
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+  <p>On this page</p>
+  <ol><li><a href="#what-went-wrong">What went wrong with "#3"?</a></li><li><a href="#why-it-flips">Why does the number sign flip?</a></li><li><a href="#what-an-isolate-does">What does a left-to-right isolate do?</a></li><li><a href="#where-duo-clone-adds-it">Where does Duo Clone add the isolate?</a></li><li><a href="#alternatives">Is there another way to do this on Android?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#what-went-wrong">What went wrong with "#3"?</a></li><li><a href="#why-it-flips">Why does the number sign flip?</a></li><li><a href="#what-an-isolate-does">What does a left-to-right isolate do?</a></li><li><a href="#where-duo-clone-adds-it">Where does Duo Clone add the isolate?</a></li><li><a href="#alternatives">Is there another way to do this on Android?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol></details>
+</nav>
+    <div class="prose">
+<p class="answer"><strong>Duo Clone wraps the copy number in a left-to-right isolate, so "#3" stays in order next to Arabic text instead of showing as "3#".</strong> The flip comes from the Unicode bidirectional algorithm: after Arabic letters the digit is treated as an Arabic number, and the number sign next to it takes the right-to-left direction. The fix adds two invisible characters, U+2066 before the number and U+2069 after it.</p>
+
+<p>This note explains the rules behind the flip, what the isolate does, where Duo Clone adds it and where it deliberately does not, and what other apps that mix a label with a number can do.</p>
+
+<h2 id="what-went-wrong">What went wrong with "#3"?</h2>
+<p><strong>Every copy has a number, shown as "#3" in its name, on its badge, in dialogs and in the quick-switch notification, and after an Arabic label or Arabic words the number sign appeared on the wrong side of the digit.</strong> A name that should read "label #3" showed "3#" in the right-to-left layout. The copy was still the right one, but the name looked wrong, and two copies of the same app are told apart by exactly this number.</p>
+
+<h2 id="why-it-flips">Why does the number sign flip?</h2>
+<p><strong>Three rules of the Unicode Bidirectional Algorithm combine: the digit becomes an Arabic number, the number sign becomes neutral, and the neutral takes the direction of its neighbours.</strong> Unicode Standard Annex #9 sets them out. In short:</p>
+<ol>
+<li><strong>W2:</strong> the algorithm looks backward from a European number to the first strong character, and "if an AL is found, change the type of the European number to Arabic number". Arabic letters are type AL, so a digit after Arabic text counts as an Arabic number.</li>
+<li><strong>W5 and W6:</strong> a number sign is a European terminator. W5 joins terminators to an adjacent European number, but the digit is no longer one, so W6 turns the sign into an "Other Neutral".</li>
+<li><strong>N1:</strong> "A sequence of NIs takes the direction of the surrounding strong text if the text on both sides has the same direction", and numbers "act as if they were R" for this purpose. The space and the sign sit between Arabic letters and an Arabic number, so they take the right-to-left direction.</li>
+</ol>
+<p>The sign is then laid out right to left, and it ends up to the right of the digit: "3#". Persian and Urdu are written with Arabic-script letters of the same type, so the same rules apply to them. Duo Clone is available in all three languages.</p>
+
+<h2 id="what-an-isolate-does">What does a left-to-right isolate do?</h2>
+<p><strong>A directional isolate treats the text inside it as a separate run, so the surrounding text cannot change how it is ordered and it cannot change the order outside.</strong> UAX #9 says: "Characters within an isolate cannot affect the ordering of characters outside it, or vice versa." The left-to-right isolate is a pair of characters, U+2066 LEFT-TO-RIGHT ISOLATE and U+2069 POP DIRECTIONAL ISOLATE. They were introduced in Unicode 6.3, and the annex encourages isolates over embeddings in new documents.</p>
+<p>Inside the pair, "#3" has no Arabic letter before it, so the digit stays a European number, W5 attaches the sign to it, and the pair reads left to right as "#3". The Arabic words around it keep their own direction. The W3C's article on inline bidi markup describes the same two characters as the way to get this effect in plain text, where markup such as a <code>dir</code> attribute is not available.</p>
+
+<h2 id="where-duo-clone-adds-it">Where does Duo Clone add the isolate?</h2>
+<p><strong>Since version 0.1.23, every string that holds a copy number wraps it, and so do the default names of new copies and the lines of the quick-switch notification.</strong></p>
+<ul>
+<li><strong>Interface strings.</strong> Every string resource with a "#" before a number puts the number inside the isolate, in every language that writes the number that way. An example is the badge text for the Arabic interface, where the number sits between U+2066 and U+2069.</li>
+<li><strong>Default names.</strong> The default name of a new copy is built in code from the app's label and the number, not from a string. The isolate is added only when the label contains right-to-left letters, which the code finds with the character's directionality in Java. A label in a left-to-right script stays plain, so "Clock #3" has no hidden characters.</li>
+<li><strong>Quick switch.</strong> The notification lists running copies as a number and a name, and the number is wrapped in the same way, on the line and on each button.</li>
+</ul>
+<p>The isolate is limited to labels that need it because names are stored and the user can edit them. Invisible characters in every name would stay in the stored text and travel with it, for example into text the user copies out of the field. A unit test checks that left-to-right labels such as an English and a Vietnamese one stay plain, that right-to-left labels get the isolate, and that the detection looks at letters and not at digits or the number sign.</p>
+
+<h2 id="alternatives">Is there another way to do this on Android?</h2>
+<p><strong>Yes: Android's <code>BidiFormatter</code> wraps a string with the right marks for its context, and a fixed number format like "#3" can use an explicit isolate.</strong> The <code>BidiFormatter</code> reference says its <code>unicodeWrap</code> methods declare the direction of an inserted string and isolate it, and that isolating works through invisible direction marks. Duo Clone's number always reads left to right, so it uses the explicit pair. If the string you insert is unknown text, such as a user's name, a formatter that estimates the direction is the safer tool.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>Whenever you place a number, a code or a tag next to text that can be right to left, isolate the fragment, and test with real Arabic words before and after it.</strong> A fragment that reads fine after English can flip after Arabic, because the algorithm looks back to the nearest strong letter. Put the isolate in the string resource where possible, so translators keep it, and keep it out of data that users edit or search.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Unicode Consortium, <a href="https://unicode.org/reports/tr9/">UAX #9: Unicode Bidirectional Algorithm</a>, rules W2, W5, W6 and N1 and the section on directional isolates, Unicode 18.0.0 edition of 1 September 2026 (read 27 November 2026).</li>
+<li>W3C Internationalization, <a href="https://www.w3.org/International/articles/inline-bidi-markup/">Inline markup and bidirectional text in HTML</a>: isolating characters in plain text (read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/reference/androidx/core/text/BidiFormatter">BidiFormatter</a>: wrapping and isolating strings (read 27 November 2026).</li>
+<li>Duo Clone <a href="../../changelog/#v0-1-23">changelog, version 0.1.23</a>: "the copy number stays in order next to right-to-left text".</li>
+</ul>
+</section>
+
+    </div>
+  </div>
+</div>
+</article>
+<section class="section related" aria-labelledby="related-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="related-title">More developer notes</h2><a class="more" href="../">All notes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="notes-grid"><article class="note-card">
+  <div class="cover"><img src="../../notes/android-15-16-app-cloners/android-15-16-insets.svg" width="1200" height="630" alt="Phone outline with status and navigation bars, an older app card sliding under the bars in pink and sitting inside them in green, labelled API 35 and API 36" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/android-15-16-app-cloners/">What Android 15 and 16 changed for app cloners</a></h3>
+    <p>Edge-to-edge with no way out, predictive back, and the copy-specific bugs Duo Clone fixed on the newest Android versions, release by release.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/push-notifications-in-app-clones/push-closed-clone.svg" width="1200" height="630" alt="A message from the cloud reaches a running copy and a closed copy, and ends as a notification tagged with the copy&#x27;s number" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/push-notifications-in-app-clones/">Push notifications in app copies, including copies you have closed</a></h3>
+    <p>How push messages reach an app that runs inside a cloner, why a closed copy needs an opt-in foreground service, and how notifications name the copy they belong to.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/how-app-copies-stay-separate/copies-one-uid.svg" width="1200" height="630" alt="Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 7 min read</p>
+    <h3><a href="../../notes/how-app-copies-stay-separate/">How app copies stay separate, and where the limits are</a></h3>
+    <p>Android keeps apps apart with one user ID each. Copies in a cloner share one. What keeps them apart instead, where that stops, and how profiles compare.</p>
+  </div>
+</article></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</p>
+    <nav aria-label="Footer">
+      <a href="../../notes/">Developer notes</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
+      <a href="https://xlabcompany.com/">XLAB</a>
+    </nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+  var p=document.querySelector('[data-print]');
+  if(p&&'IntersectionObserver' in window){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){setTimeout(function(){p.classList.add('in')},120);o.disconnect();}})},{threshold:.4});o.observe(p);}else if(p){p.classList.add('in');}
+  var links=[].slice.call(document.querySelectorAll('.toc > ol a'));
+  if(links.length&&'IntersectionObserver' in window){
+    var map={};links.forEach(function(a){map[a.hash.slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on');}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=document.getElementById(id);if(h)io.observe(h);});
+  }
+})();
+</script>
+</body>
+</html>

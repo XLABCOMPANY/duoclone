@@ -1,0 +1,56 @@
+{
+  "path": "notes/biometric-prompts-in-app-clones/",
+  "kind": "note",
+  "title": "Fingerprint and Face Prompts Inside an App Clone",
+  "h1": "Fingerprint and face prompts inside an app copy: why they did not show and what changed",
+  "description": "Why Android's fingerprint and face prompt never appeared in an app copy, how Duo Clone 0.1.32 fixed it, and what stays with the system, passkeys included.",
+  "card": "Why the system biometric prompt failed inside a copy, the one-line cause in how Android checks permissions, and where saved passwords and passkeys stand today.",
+  "published": "2026-11-27",
+  "cover": "biometric-prompt-copy.svg",
+  "coverAlt": "A system fingerprint prompt over an app copy, with biometric data kept in a sealed system box and only a yes passing out",
+  "caption": "The prompt, the sensor and the match belong to the system. The app only receives the answer.",
+  "readMinutes": 5
+}
+---
+<p class="answer"><strong>Since version 0.1.32, an app in a Duo Clone copy can show Android's fingerprint and face prompt, which never appeared before because Android checks the biometric permission against a user ID and a package name, and a copy's package does not belong to Duo Clone's user ID.</strong> Duo Clone now makes these requests under its own identity. The sensor, the prompt and the match stay with the system, and the app still receives only the result.</p>
+
+<p>This note explains how an app asks for a fingerprint or face, why that request failed inside a copy, what the fix changes and what it leaves alone, and where passwords and passkeys stand in a copy.</p>
+
+<h2 id="how-apps-ask">How does an app ask for a fingerprint or face?</h2>
+<p><strong>An app calls <code>BiometricPrompt</code>, the system shows its own dialog, and the app gets back a success, a failure or an error.</strong> Android's biometric guide describes the dialog as system-provided and "consistent across the apps that use it". The app never draws the prompt and never touches the sensor. It supplies a title and a callback, and the callback receives an authentication result.</p>
+<p>To use biometrics at all, the app declares the <code>USE_BIOMETRIC</code> permission, which Android's reference lists as a normal permission, added in API level 28. A normal permission is granted at install time, with no prompt to the user.</p>
+
+<h2 id="why-it-failed">Why did the prompt never appear in a copy?</h2>
+<p><strong>Android's biometric service checks that the calling app holds <code>USE_BIOMETRIC</code> by looking at the caller's user ID and package name together, and in a copy those two do not belong to each other.</strong> A copy runs inside Duo Clone, so it has Duo Clone's user ID, as the note on <a href="../how-app-copies-stay-separate/">how app copies stay separate</a> explains. The request, however, names the copied app's package, and that package is not installed under Duo Clone's user ID. Android rejects the pair with an error, and the prompt is never shown, so fingerprint sign-in looks broken even though the sensor works.</p>
+
+<h2 id="what-changed">What did Duo Clone change in 0.1.32?</h2>
+<p><strong>Duo Clone 0.1.32 sends the biometric request of a copy in a form the check accepts; the sensor, the prompt and the match stay with the system.</strong> The user ID and the package name now belong together, so the check passes and the system shows its normal dialog. The changelog states the result: "Fingerprint and face prompts now work inside copies of apps that use them. Before, the prompt never appeared in a copy."</p>
+<p>The fix covers fingerprint prompts and face prompts alike.</p>
+
+<h2 id="what-stays-with-the-system">What stays with the system?</h2>
+<p><strong>A copy gets the same thing a normal install gets, the result of the check, and not the fingerprint or face data behind it.</strong> For the stronger biometric classes, Android's biometric security documentation requires that raw biometric data and its derivatives, such as templates, "are never accessible from outside the secure isolated environment", such as the TEE or a Secure Element. The app receives the outcome, success or not, and nothing about the finger or the face.</p>
+<p>Two practical points follow. A copy uses the fingerprints and faces enrolled on the phone, so there is nothing to enrol again. And the biometric prompt is separate from Private Space, where Duo Clone's own lock hides copies behind a fingerprint or a PIN.</p>
+
+<h2 id="passwords-and-passkeys">What about saved passwords and passkeys?</h2>
+<p><strong>A password that an app offers to save in a copy is kept for that copy only, and passkeys do not work in copies.</strong> Both changes came in 0.1.33, in the area next to biometric sign-in.</p>
+<ul>
+<li><strong>Saved passwords.</strong> When an app in a copy saves a login, Duo Clone keeps it encrypted in that copy's own data. When the app asks for a login later, Duo Clone shows the prompt <em>Sign in with a saved login?</em> with the saved accounts. The entries live and die with the copy: Clear data and Delete remove them. They are not synced to a Google account.</li>
+<li><strong>Passkeys.</strong> Duo Clone answers a passkey request as unsupported, so the app can offer another way to sign in, and shows the notice <em>Passkeys don't work in clones. Use another way to sign in.</em> when you start one.</li>
+</ul>
+<p>Clearing the credential state also reports success now, so an app that waits for that answer no longer hangs when you log out.</p>
+
+<h2 id="limits">Where are the limits?</h2>
+<p><strong>The fix makes the system prompt available. It does not decide whether an app accepts a copy.</strong> Apps that ask not to run in a virtual space, using the manifest property in the <a href="../require-secure-env/">REQUIRE_SECURE_ENV note</a>, are still refused, and many banking and wallet apps are in that group. An app can also run its own checks on the device, and a copy may not pass them.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If your app fails biometric sign-in only inside a container, look at the permission check before the sensor: the check works on a user ID and a package name, and a host that gets them wrong makes a working sensor look broken.</strong> Whatever the cause, keep a fallback sign-in, because a prompt can be unavailable for reasons the app does not control.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Duo Clone <a href="../../changelog/#v0-1-32">changelog, version 0.1.32</a> (21 November 2026) and <a href="../../changelog/#v0-1-33">version 0.1.33</a>: fingerprint and face prompts, saved passwords, passkeys.</li>
+<li>Android Developers, <a href="https://developer.android.com/identity/sign-in/biometric-auth">Show a biometric authentication dialog</a>: the system dialog and the authentication callback (last updated 12 October 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/reference/android/Manifest.permission">Manifest.permission</a>: <code>USE_BIOMETRIC</code>, added in API level 28, protection level normal (read 27 November 2026).</li>
+<li>Android Open Source Project, <a href="https://source.android.com/docs/security/features/biometric">Biometric security</a>: biometric data and templates stay in the secure environment (last updated 30 September 2026, read 27 November 2026).</li>
+</ul>
+</section>

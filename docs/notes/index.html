@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Duo Clone Developer Notes: Android Rules and Limits</title>
-<meta name="description" content="Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.">
+<meta name="description" content="Developer notes from XLAB, maker of Duo Clone: Android rules a container follows, copy separation, microG, Android 16, backups, push, foreground services.">
 <link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#fbfbf8">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Duo Clone developer page">
 <meta property="og:title" content="Duo Clone Developer Notes: Android Rules and Limits">
-<meta property="og:description" content="Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.">
+<meta property="og:description" content="Developer notes from XLAB, maker of Duo Clone: Android rules a container follows, copy separation, microG, Android 16, backups, push, foreground services.">
 <meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/">
 <meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/notes.png">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Duo Clone Developer Notes: Android Rules and Limits">
-<meta name="twitter:description" content="Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.">
+<meta name="twitter:description" content="Developer notes from XLAB, maker of Duo Clone: Android rules a container follows, copy separation, microG, Android 16, backups, push, foreground services.">
 <meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/notes.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
@@ -87,24 +87,54 @@
      {
       "@type": "ListItem",
       "position": 1,
+      "url": "https://xlabcompany.github.io/duoclone/notes/chunked-backup-encryption/",
+      "name": "Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it"
+     },
+     {
+      "@type": "ListItem",
+      "position": 2,
+      "url": "https://xlabcompany.github.io/duoclone/notes/push-notifications-in-app-clones/",
+      "name": "Push notifications in app copies, including copies you have closed"
+     },
+     {
+      "@type": "ListItem",
+      "position": 3,
+      "url": "https://xlabcompany.github.io/duoclone/notes/foreground-service-types-app-cloner/",
+      "name": "Choosing honest foreground service types in an app cloner"
+     },
+     {
+      "@type": "ListItem",
+      "position": 4,
+      "url": "https://xlabcompany.github.io/duoclone/notes/biometric-prompts-in-app-clones/",
+      "name": "Fingerprint and face prompts inside an app copy: why they did not show and what changed"
+     },
+     {
+      "@type": "ListItem",
+      "position": 5,
+      "url": "https://xlabcompany.github.io/duoclone/notes/copy-number-right-to-left-text/",
+      "name": "Keeping the copy number in order next to right-to-left text"
+     },
+     {
+      "@type": "ListItem",
+      "position": 6,
       "url": "https://xlabcompany.github.io/duoclone/notes/require-secure-env/",
       "name": "REQUIRE_SECURE_ENV: how an Android app opts out of app cloners"
      },
      {
       "@type": "ListItem",
-      "position": 2,
+      "position": 7,
       "url": "https://xlabcompany.github.io/duoclone/notes/how-app-copies-stay-separate/",
       "name": "How app copies stay separate, and where the limits are"
      },
      {
       "@type": "ListItem",
-      "position": 3,
+      "position": 8,
       "url": "https://xlabcompany.github.io/duoclone/notes/android-15-16-app-cloners/",
       "name": "What Android 15 and 16 changed for app cloners"
      },
      {
       "@type": "ListItem",
-      "position": 4,
+      "position": 9,
       "url": "https://xlabcompany.github.io/duoclone/notes/microg-in-an-app-cloner/",
       "name": "Shipping microG inside an app cloner: licence, Accounts and limits"
      }
@@ -151,6 +181,46 @@
 <section class="section" style="padding-top:2rem" aria-label="All notes">
   <div class="wrap"><div class="notes-grid">
 <article class="note-card lead">
+  <div class="cover"><img src="../notes/chunked-backup-encryption/chunked-backup-chunks.svg" width="1200" height="630" alt="A backup file cut into six numbered chunks, each with its own lock, the last one flagged, and a stray out-of-place chunk crossed out" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h2><a href="../notes/chunked-backup-encryption/">Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it</a></h2>
+    <p>Why one AES-GCM pass over a whole backup runs out of memory, and how encrypting in separately authenticated chunks fixed it without breaking old backup files.</p>
+  </div>
+</article>
+<article class="note-card">
+  <div class="cover"><img src="../notes/push-notifications-in-app-clones/push-closed-clone.svg" width="1200" height="630" alt="A message from the cloud reaches a running copy and a closed copy, and ends as a notification tagged with the copy&#x27;s number" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h2><a href="../notes/push-notifications-in-app-clones/">Push notifications in app copies, including copies you have closed</a></h2>
+    <p>How push messages reach an app that runs inside a cloner, why a closed copy needs an opt-in foreground service, and how notifications name the copy they belong to.</p>
+  </div>
+</article>
+<article class="note-card">
+  <div class="cover"><img src="../notes/foreground-service-types-app-cloner/foreground-service-types.svg" width="1200" height="630" alt="Four service tiles with notification strips and labels: special use for keeping copies, special use for push, data sync for backup, and a pass-through tile" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h2><a href="../notes/foreground-service-types-app-cloner/">Choosing honest foreground service types in an app cloner</a></h2>
+    <p>Why keeping copies alive is not data sync, which type each Duo Clone service declares, and how a copied app&#x27;s own foreground service gets the type it asks for.</p>
+  </div>
+</article>
+<article class="note-card wide">
+  <div class="cover"><img src="../notes/biometric-prompts-in-app-clones/biometric-prompt-copy.svg" width="1200" height="630" alt="A system fingerprint prompt over an app copy, with biometric data kept in a sealed system box and only a yes passing out" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 5 min read</p>
+    <h2><a href="../notes/biometric-prompts-in-app-clones/">Fingerprint and face prompts inside an app copy: why they did not show and what changed</a></h2>
+    <p>Why the system biometric prompt failed inside a copy, the one-line cause in how Android checks permissions, and where saved passwords and passkeys stand today.</p>
+  </div>
+</article>
+<article class="note-card half">
+  <div class="cover"><img src="../notes/copy-number-right-to-left-text/copy-number-bidi.svg" width="1200" height="630" alt="A copy name in Arabic script with the number sign on the wrong side, crossed out, above the corrected name inside an isolate" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 5 min read</p>
+    <h2><a href="../notes/copy-number-right-to-left-text/">Keeping the copy number in order next to right-to-left text</a></h2>
+    <p>Why a copy number such as #3 flips to 3# next to Arabic text, which rules in the Unicode bidirectional algorithm cause it, and the two invisible characters that fix it.</p>
+  </div>
+</article>
+<article class="note-card half">
   <div class="cover"><img src="../notes/require-secure-env/secure-env-opt-out.svg" width="1200" height="630" alt="Android manifest sheet with the REQUIRE_SECURE_ENV line marked in pink, and an app card stopped at a dashed container border" loading="lazy" decoding="async"></div>
   <div>
     <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
@@ -158,7 +228,7 @@
     <p>One manifest line tells app cloners on Google Play to leave your app alone. What it covers, how it differs from Play Integrity, and how Duo Clone honours it.</p>
   </div>
 </article>
-<article class="note-card">
+<article class="note-card half">
   <div class="cover"><img src="../notes/how-app-copies-stay-separate/copies-one-uid.svg" width="1200" height="630" alt="Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile" loading="lazy" decoding="async"></div>
   <div>
     <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 7 min read</p>
@@ -166,7 +236,7 @@
     <p>Android keeps apps apart with one user ID each. Copies in a cloner share one. What keeps them apart instead, where that stops, and how profiles compare.</p>
   </div>
 </article>
-<article class="note-card">
+<article class="note-card half">
   <div class="cover"><img src="../notes/android-15-16-app-cloners/android-15-16-insets.svg" width="1200" height="630" alt="Phone outline with status and navigation bars, an older app card sliding under the bars in pink and sitting inside them in green, labelled API 35 and API 36" loading="lazy" decoding="async"></div>
   <div>
     <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
@@ -174,7 +244,7 @@
     <p>Edge-to-edge with no way out, predictive back, and the copy-specific bugs Duo Clone fixed on the newest Android versions, release by release.</p>
   </div>
 </article>
-<article class="note-card wide">
+<article class="note-card half">
   <div class="cover"><img src="../notes/microg-in-an-app-cloner/microg-account-spaces.svg" width="1200" height="630" alt="Three Account spaces drawn as rounded frames, each holding app copies and one key for its sign-in, beside an Apache 2.0 licence sheet" loading="lazy" decoding="async"></div>
   <div>
     <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>

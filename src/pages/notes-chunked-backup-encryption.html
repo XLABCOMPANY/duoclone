@@ -1,0 +1,61 @@
+{
+  "path": "notes/chunked-backup-encryption/",
+  "kind": "note",
+  "title": "Chunked AES-GCM Backups for Large App Clone Data",
+  "h1": "Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it",
+  "description": "Duo Clone 0.1.37 encrypts backups in AES-GCM chunks, so a copy with hundreds of megabytes backs up and restores, and a damaged or cut-off file is rejected.",
+  "card": "Why one AES-GCM pass over a whole backup runs out of memory, and how encrypting in separately authenticated chunks fixed it without breaking old backup files.",
+  "published": "2026-11-27",
+  "cover": "chunked-backup-chunks.svg",
+  "coverAlt": "A backup file cut into six numbered chunks, each with its own lock, the last one flagged, and a stray out-of-place chunk crossed out",
+  "caption": "Each chunk carries its own seal and its place in the file. A chunk out of order does not open.",
+  "readMinutes": 6
+}
+---
+<p class="answer"><strong>Duo Clone 0.1.37 writes a backup as a series of AES-GCM chunks that are each sealed and verified on their own, instead of one encryption pass over the whole file, so a copy with hundreds of megabytes of data now backs up without running out of memory.</strong> Backup files from earlier versions still restore. Every chunk is tied to its position and to a last-chunk flag, so a reordered, truncated or extended backup is rejected.</p>
+
+<p>This note explains why a single GCM pass fails on large data, how chunking fixes it, which properties the chunked design must keep, and what changed around it in backup and restore.</p>
+
+<h2 id="why-large-backups-failed">Why did large backups fail?</h2>
+<p><strong>A backup is the copy's data zipped and encrypted with AES-256-GCM, and encrypting the whole file in one pass made Android's crypto provider hold all of the data in memory until the final call.</strong> GCM is an authenticated mode: it produces ciphertext plus a tag, and the tag is checked when the file is decrypted. Google's <code>Cipher</code> reference describes the tag as appended to the ciphertext on encryption and verified on decryption, and its Cryptography guide recommends AES-GCM with 256-bit keys when you are free to choose.</p>
+<p>On Android the provider behind <code>AES/GCM/NoPadding</code> is Conscrypt. Its AEAD cipher holds the whole input in memory until <code>doFinal</code> returns. A copy of a few hundred megabytes could therefore fail to back up, and that size is easy to reach for a chat app with a media cache. The failure was a memory limit of the one-pass design, not a problem with the key or the password.</p>
+
+<h2 id="what-is-a-chunked-backup">What is a chunked backup?</h2>
+<p><strong>A chunked backup cuts the stream into fixed-size pieces of about 1 MiB, seals each piece with AES-GCM on its own, and writes it out before starting the next.</strong> Only one chunk is in memory at a time, so memory use no longer grows with the size of the copy. Restore works the same way in reverse: it reads a chunk, checks its tag and only then writes the plaintext out.</p>
+<p>The idea is not new. Google's Tink library describes it as streaming authenticated encryption: it is useful "when the data to be encrypted is too large to be processed in a single step", and encryption "is done in segments, which are bound to their location within a ciphertext and cannot be removed or reordered". Tink's recommended variant also uses 1 MB segments.</p>
+
+<h2 id="what-the-design-must-keep">Which properties must a chunked design keep?</h2>
+<p><strong>Splitting a file into chunks creates three new ways to go wrong: a repeated nonce, a missing position, and a missing end. The design closes each one.</strong></p>
+<ol>
+<li><strong>No nonce is used twice under one key.</strong> The <code>Cipher</code> reference states that GCM has a uniqueness requirement on IVs for a given key, and that repeating them makes encryption subject to forgery attacks. Each backup file gets its own random value, and every chunk adds its own chunk number, so no two chunks share a nonce.</li>
+<li><strong>Each chunk authenticates its place.</strong> The associated data of every chunk includes the chunk number, so a chunk moved to another position fails its tag check.</li>
+<li><strong>The end is authenticated.</strong> The associated data carries a flag that is set only on the last chunk. A file cut short is missing the flagged chunk and is rejected as truncated, and data added after the flagged chunk is rejected as trailing data.</li>
+</ol>
+<p>Associated data is the part of GCM made for this. It is authenticated but not encrypted, and NIST's GCM specification, SP 800-38D, defines the mode and its inputs. The <code>Cipher</code> reference adds one practical rule: supply all associated data before the ciphertext, so the provider does not have to buffer.</p>
+<p>The result is that a damaged backup stops the restore at the first bad chunk, and a wrong password fails at the first chunk too, without reading the rest of the file.</p>
+
+<h2 id="what-else-changed">What else changed in backup and restore?</h2>
+<p><strong>Three smaller changes shipped in the same version, all visible in the changelog.</strong></p>
+<ul>
+<li>Restore reads the file straight from where you saved it, instead of first copying it into an encrypted temporary file on the phone. A restore therefore needs less free space.</li>
+<li>When the phone or the folder you picked is out of space, the app says <em>Not enough free storage for the backup. Free some space on the phone or the destination and try again.</em> Before, this case showed a generic storage error.</li>
+<li>The limit on how much data a restore will unpack was raised, so large copies are not refused as oversized.</li>
+</ul>
+<p>Backups made by earlier versions still restore. A backup written by 0.1.37 or later is meant for 0.1.37 or later, so update before you restore one on another phone. If you only want the steps for making and restoring a backup in the app, <a href="https://duoclone.com/blog/backup-restore-cloned-app/">a plain-language walk-through of backing up a cloned app</a> is on the Duo Clone website.</p>
+
+<h2 id="what-it-does-not-do">What does a backup not protect against?</h2>
+<p><strong>Encryption keeps the file private and detects tampering, but it cannot recover a forgotten password, and it protects the file only, not the phone it was made on.</strong> The app warns about both before it writes anything: the backup holds the signed-in account and personal data of the copy, and "if you forget this password, the backup cannot be restored." Keep the file somewhere safe and do not share it.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If you encrypt large files with AES-GCM on Android, do not wrap the whole file in one cipher call: encrypt in chunks, bind the chunk number and a last-chunk flag into the associated data, and never reuse a nonce.</strong> Test with data much larger than your heap allows, because a design that works on a 5 MB file can fail on a 500 MB one. If you can take a dependency, start from Tink's Streaming AEAD, which already implements the segment scheme and documents its limits.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Duo Clone <a href="../../changelog/#v0-1-37">changelog, version 0.1.37</a> (25 November 2026): backups in pieces, restore from the saved file, out-of-space message.</li>
+<li>Android Developers, <a href="https://developer.android.com/reference/javax/crypto/Cipher">javax.crypto.Cipher</a>: authenticated encryption, associated data and the GCM IV uniqueness requirement (read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/privacy-and-security/cryptography">Cryptography</a>: recommended algorithms, AES/GCM/NoPadding with 256-bit keys (read 27 November 2026).</li>
+<li>Google for Developers, <a href="https://developers.google.com/tink/streaming-aead">Tink: Streaming Authenticated Encryption with Associated Data</a> (read 27 November 2026).</li>
+<li>NIST, <a href="https://csrc.nist.gov/pubs/sp/800/38/d/final">SP 800-38D, Galois/Counter Mode (GCM) and GMAC</a>, November 2007 (read 27 November 2026).</li>
+</ul>
+</section>

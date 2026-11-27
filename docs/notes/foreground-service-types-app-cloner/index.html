@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choosing Foreground Service Types in an App Cloner</title>
+<meta name="description" content="Which foreground service type each Duo Clone service declares and why, and how services started by copied apps get the type they ask for on Android 14 and 15.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/foreground-service-types-app-cloner/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fbfbf8">
+<meta name="author" content="XLAB">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Duo Clone developer page">
+<meta property="og:title" content="Choosing Foreground Service Types in an App Cloner">
+<meta property="og:description" content="Which foreground service type each Duo Clone service declares and why, and how services started by copied apps get the type they ask for on Android 14 and 15.">
+<meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/foreground-service-types-app-cloner/">
+<meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/foreground-service-types-app-cloner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Four service tiles with notification strips and labels: special use for keeping copies, special use for push, data sync for backup, and a pass-through tile">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Choosing Foreground Service Types in an App Cloner">
+<meta name="twitter:description" content="Which foreground service type each Duo Clone service declares and why, and how services started by copied apps get the type they ask for on Android 14 and 15.">
+<meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/foreground-service-types-app-cloner.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/be-vietnam-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="sitemap" type="application/xml" href="https://xlabcompany.github.io/duoclone/sitemap.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://xlabcompany.com/#organization",
+   "name": "XLAB",
+   "url": "https://xlabcompany.com/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://xlabcompany.github.io/duoclone/#website",
+   "url": "https://xlabcompany.github.io/duoclone/",
+   "name": "Duo Clone developer page",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   }
+  },
+  {
+   "@type": "MobileApplication",
+   "@id": "https://duoclone.com/#app",
+   "name": "Duo Clone",
+   "operatingSystem": "Android 6.0+",
+   "applicationCategory": "UtilitiesApplication",
+   "url": "https://duoclone.com/",
+   "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
+   "image": "https://xlabcompany.github.io/duoclone/assets/icon-512.png",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "sameAs": [
+    "https://github.com/XLABCOMPANY/duoclone"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://xlabcompany.github.io/duoclone/notes/foreground-service-types-app-cloner/#article",
+   "headline": "Choosing honest foreground service types in an app cloner",
+   "description": "Which foreground service type each Duo Clone service declares and why, and how services started by copied apps get the type they ask for on Android 14 and 15.",
+   "datePublished": "2026-11-27",
+   "dateModified": "2026-11-27",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "image": "https://xlabcompany.github.io/duoclone/og/foreground-service-types-app-cloner.png",
+   "mainEntityOfPage": "https://xlabcompany.github.io/duoclone/notes/foreground-service-types-app-cloner/",
+   "isPartOf": {
+    "@id": "https://xlabcompany.github.io/duoclone/#website"
+   },
+   "about": {
+    "@id": "https://duoclone.com/#app"
+   },
+   "inLanguage": "en",
+   "wordCount": 1184
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://xlabcompany.github.io/duoclone/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Developer notes",
+     "item": "https://xlabcompany.github.io/duoclone/notes/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Choosing honest foreground service types in an app cloner",
+     "item": "https://xlabcompany.github.io/duoclone/notes/foreground-service-types-app-cloner/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/icon-192.png" width="40" height="40" alt=""><span><b>Duo Clone</b><small>Developer page by XLAB</small></span></a>
+    <nav class="nav" aria-label="Main"><a href="../.././">Home</a><a href="../../notes/" aria-current="page">Notes</a><a href="../../changelog/">Changelog</a><a href="https://github.com/XLABCOMPANY/duoclone"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.84c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a></nav>
+  </div>
+</header>
+<main id="main">
+<article>
+<header class="art-head">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../../">Home</a></li><li><a href="../">Developer notes</a></li><li aria-current="page">Choosing honest foreground service types in an app cloner</li></ol></nav>
+      <h1>Choosing honest foreground service types in an app cloner</h1>
+      <p class="byline"><span>By <b><a href="https://xlabcompany.com/" rel="author">XLAB</a></b>, developer of Duo Clone</span><span class="dot"></span><time datetime="2026-11-27">27 November 2026</time><span class="dot"></span><span>6 min read</span></p>
+    </div>
+    <figure class="art-cover">
+      <img src="foreground-service-types.svg" width="1200" height="630" alt="Four service tiles with notification strips and labels: special use for keeping copies, special use for push, data sync for backup, and a pass-through tile" fetchpriority="high">
+      <figcaption>One type per kind of work. A copied app&#x27;s own service passes through the type it asks for.</figcaption>
+    </figure>
+  </div>
+</header>
+<div class="art-body">
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+  <p>On this page</p>
+  <ol><li><a href="#what-android-and-play-expect">What do Android and Google Play expect from a service type?</a></li><li><a href="#each-duo-clone-service">Which type does each Duo Clone service declare?</a></li><li><a href="#why-not-data-sync">Why is keeping copies running not data sync?</a></li><li><a href="#copied-apps">How does a copied app's own foreground service get a type?</a></li><li><a href="#after-a-restart">What happens after the phone restarts?</a></li><li><a href="#permissions">What else was trimmed?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#what-android-and-play-expect">What do Android and Google Play expect from a service type?</a></li><li><a href="#each-duo-clone-service">Which type does each Duo Clone service declare?</a></li><li><a href="#why-not-data-sync">Why is keeping copies running not data sync?</a></li><li><a href="#copied-apps">How does a copied app's own foreground service get a type?</a></li><li><a href="#after-a-restart">What happens after the phone restarts?</a></li><li><a href="#permissions">What else was trimmed?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol></details>
+</nav>
+    <div class="prose">
+<p class="answer"><strong>Duo Clone declares a foreground service type for each kind of work it does in the background: <code>specialUse</code> for keeping copies running and for receiving push messages, <code>dataSync</code> for backup and restore, and, for services started by copied apps, the type the copied app asks for.</strong> Since version 0.1.36 each service declares the type that describes what it really does.</p>
+
+<p>This note covers what Android and Google Play expect from a foreground service type, the type of each Duo Clone service and the reason for it, how a copied app's own foreground service is typed, and what happens when the phone restarts.</p>
+
+<h2 id="what-android-and-play-expect">What do Android and Google Play expect from a service type?</h2>
+<p><strong>An app that targets Android 14 must declare at least one foreground service type for each foreground service, and a permission for each type it uses.</strong> Android's page on required types says that a service without a type throws <code>MissingForegroundServiceTypeException</code> when it calls <code>startForeground()</code>. The page also says that a use case that matches none of the types should move to WorkManager or a user-initiated data transfer job, which is why the choice of type is a design decision and not a label.</p>
+<p>Google Play adds its own step. Apps that target Android 14 and above declare the foreground service types they use in a declaration on the App content page of Play Console, and each type is subject to review. For <code>dataSync</code> backup and restore, Play's help page expects a feature that the user starts, and says that the demonstration cannot be "fully automatic or background backup or recovery". For <code>specialUse</code> it says to use it "in limited scenarios" where no defined type fits.</p>
+
+<h2 id="each-duo-clone-service">Which type does each Duo Clone service declare?</h2>
+<p><strong>Four kinds of service run in the foreground, and each declares the type that matches its work.</strong></p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Service</th><th>Type</th><th>What it does</th><th>When it runs</th></tr></thead>
+<tbody>
+<tr><td>Keep-running service</td><td><code>specialUse</code></td><td>Keeps the copies you opened running while you use other apps. Its notification shows how many copies run and has a Stop all button.</td><td>Only while at least one copy runs and the setting is on</td></tr>
+<tr><td>Push service</td><td><code>specialUse</code></td><td>Keeps the push connection so apps in closed copies can show notifications.</td><td>Only after you turn on Notifications from closed clones</td></tr>
+<tr><td>Backup and restore service</td><td><code>dataSync</code></td><td>Writes a copy's data to a file, or reads it back.</td><td>Only while you back up or restore</td></tr>
+<tr><td>Helper services for copies</td><td>The type the copied app asks for, otherwise <code>specialUse</code></td><td>Carry a foreground service that a copied app starts, such as music or a call.</td><td>When the copied app starts it</td></tr>
+</tbody>
+</table>
+</div>
+<p>The two <code>specialUse</code> services each carry the explanation that Android asks for in the manifest. The keep-running service says it "Keeps the apps the user opened inside Duo Clone running while the user switches to other apps", and the push service says it "Keeps the push message connection for apps the user runs inside Duo Clone, so they can show notifications while closed".</p>
+
+<h2 id="why-not-data-sync">Why is keeping copies running not data sync?</h2>
+<p><strong>Android defines <code>dataSync</code> as data transfer, such as uploads, downloads, and "backup-and-restore operations", and keeping a process alive is none of these.</strong> Using it for that purpose would also bring its time limit with it. For apps that target Android 15, the system lets <code>dataSync</code> services run for a total of 6 hours in a 24-hour period, then calls <code>onTimeout()</code> and expects the service to stop within a few seconds. That limit makes sense for a transfer. It would cut off a copy that is simply open.</p>
+<p>The reverse holds for backup. A backup is a transfer that the user starts and that ends, so <code>dataSync</code> is the type Android's own description names for it, and the service stops when the transfer finishes. Backup and restore run in a service of their own, separate from the keep-running service.</p>
+
+<h2 id="copied-apps">How does a copied app's own foreground service get a type?</h2>
+<p><strong>When an app in a copy starts a foreground service, Duo Clone passes the type the app asked for through to the system, if three conditions hold, and falls back to <code>specialUse</code> otherwise.</strong> The three conditions are:</p>
+<ol>
+<li>the helper service in Duo Clone's manifest declares that type;</li>
+<li>Duo Clone holds the matching <code>FOREGROUND_SERVICE_</code> permission for it;</li>
+<li>the extra runtime condition that Android 14 sets for that type is met, such as location permission for a location service, camera permission for a camera service, or the microphone permission for a microphone service.</li>
+</ol>
+<p>Two further rules keep the type honest. A copied app that does not declare <code>dataSync</code> never gets <code>dataSync</code>, so a music player is not typed as a data transfer. And if Android refuses the type the app asked for, for example because the app was started from the background without the camera or microphone being available, Duo Clone retries with <code>specialUse</code>, so the copy still stays alive instead of being stopped.</p>
+<p>The helper services declare the set of types that copied apps commonly use: <code>mediaPlayback</code>, <code>phoneCall</code>, <code>microphone</code>, <code>camera</code>, <code>location</code>, <code>dataSync</code> and <code>specialUse</code>. A copied app that asks for a type outside that set gets <code>specialUse</code>.</p>
+
+<h2 id="after-a-restart">What happens after the phone restarts?</h2>
+<p><strong>Duo Clone does not start the keep-running service when the phone boots, and it never opens a copy on its own.</strong> After a restart no copy is running, so there is nothing to keep alive. Android 15 would also refuse some types here: a <code>BOOT_COMPLETED</code> receiver may not start <code>dataSync</code>, <code>camera</code>, <code>mediaPlayback</code>, <code>phoneCall</code>, <code>mediaProjection</code> or <code>microphone</code> services. The push service is the one Duo Clone does start after boot, and only when you have switched it on; <code>specialUse</code> is not on Android's list.</p>
+
+<h2 id="permissions">What else was trimmed?</h2>
+<p><strong>The Google Play build declares no permission that copies never need.</strong> The changelog for version 0.1.36 lists payment, companion-device and system-settings permissions among those removed. The Settings item <em>Allow background activity</em> opens the system's own battery screen, where the choice is yours.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>Pick the foreground service type by asking what the service does for the user, not what keeps it alive, and write the <code>specialUse</code> explanation as if a reviewer will read it.</strong> Check each type's runtime conditions and its time limit before you choose it, keep user-started work such as transfers in its own service, and test the restart and background-start paths on Android 14, 15 and 16, where the rules differ.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Duo Clone <a href="../../changelog/#v0-1-36">changelog, version 0.1.36</a> (24 November 2026): services declare the kind of work they do; permissions trimmed.</li>
+<li>Android Developers, <a href="https://developer.android.com/about/versions/14/changes/fgs-types-required">Foreground service types are required</a>: types and permissions for apps that target Android 14 (last updated 21 September 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/develop/background-work/services/fgs/service-types">Foreground service types</a>: <code>dataSync</code>, <code>specialUse</code> and the manifest property (last updated 16 November 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/develop/background-work/services/fgs/timeout">Foreground service timeouts</a>: the 6 hours in 24 hours limit and <code>onTimeout()</code> (last updated 16 November 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/about/versions/15/behavior-changes-15">Behavior changes: apps that target Android 15 or higher</a>: <code>BOOT_COMPLETED</code> restrictions (last updated 28 October 2026, read 27 November 2026).</li>
+<li>Google Play Console Help, <a href="https://support.google.com/googleplay/android-developer/answer/13392821">Understanding foreground service and full-screen intent requirements</a> (read 27 November 2026).</li>
+</ul>
+</section>
+
+    </div>
+  </div>
+</div>
+</article>
+<section class="section related" aria-labelledby="related-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="related-title">More developer notes</h2><a class="more" href="../">All notes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="notes-grid"><article class="note-card">
+  <div class="cover"><img src="../../notes/push-notifications-in-app-clones/push-closed-clone.svg" width="1200" height="630" alt="A message from the cloud reaches a running copy and a closed copy, and ends as a notification tagged with the copy&#x27;s number" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/push-notifications-in-app-clones/">Push notifications in app copies, including copies you have closed</a></h3>
+    <p>How push messages reach an app that runs inside a cloner, why a closed copy needs an opt-in foreground service, and how notifications name the copy they belong to.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/chunked-backup-encryption/chunked-backup-chunks.svg" width="1200" height="630" alt="A backup file cut into six numbered chunks, each with its own lock, the last one flagged, and a stray out-of-place chunk crossed out" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/chunked-backup-encryption/">Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it</a></h3>
+    <p>Why one AES-GCM pass over a whole backup runs out of memory, and how encrypting in separately authenticated chunks fixed it without breaking old backup files.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/android-15-16-app-cloners/android-15-16-insets.svg" width="1200" height="630" alt="Phone outline with status and navigation bars, an older app card sliding under the bars in pink and sitting inside them in green, labelled API 35 and API 36" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/android-15-16-app-cloners/">What Android 15 and 16 changed for app cloners</a></h3>
+    <p>Edge-to-edge with no way out, predictive back, and the copy-specific bugs Duo Clone fixed on the newest Android versions, release by release.</p>
+  </div>
+</article></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</p>
+    <nav aria-label="Footer">
+      <a href="../../notes/">Developer notes</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
+      <a href="https://xlabcompany.com/">XLAB</a>
+    </nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+  var p=document.querySelector('[data-print]');
+  if(p&&'IntersectionObserver' in window){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){setTimeout(function(){p.classList.add('in')},120);o.disconnect();}})},{threshold:.4});o.observe(p);}else if(p){p.classList.add('in');}
+  var links=[].slice.call(document.querySelectorAll('.toc > ol a'));
+  if(links.length&&'IntersectionObserver' in window){
+    var map={};links.forEach(function(a){map[a.hash.slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on');}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=document.getElementById(id);if(h)io.observe(h);});
+  }
+})();
+</script>
+</body>
+</html>

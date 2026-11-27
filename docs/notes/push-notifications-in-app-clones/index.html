@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Push Notifications in App Clones, Even When Closed</title>
+<meta name="description" content="How Duo Clone 0.1.33 gets push messages to apps in copies, why a closed copy needs a foreground service, and how each notification shows which copy it is from.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/push-notifications-in-app-clones/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fbfbf8">
+<meta name="author" content="XLAB">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Duo Clone developer page">
+<meta property="og:title" content="Push Notifications in App Clones, Even When Closed">
+<meta property="og:description" content="How Duo Clone 0.1.33 gets push messages to apps in copies, why a closed copy needs a foreground service, and how each notification shows which copy it is from.">
+<meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/push-notifications-in-app-clones/">
+<meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/push-notifications-in-app-clones.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A message from the cloud reaches a running copy and a closed copy, and ends as a notification tagged with the copy&#x27;s number">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Push Notifications in App Clones, Even When Closed">
+<meta name="twitter:description" content="How Duo Clone 0.1.33 gets push messages to apps in copies, why a closed copy needs a foreground service, and how each notification shows which copy it is from.">
+<meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/push-notifications-in-app-clones.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/be-vietnam-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="sitemap" type="application/xml" href="https://xlabcompany.github.io/duoclone/sitemap.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://xlabcompany.com/#organization",
+   "name": "XLAB",
+   "url": "https://xlabcompany.com/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://xlabcompany.github.io/duoclone/#website",
+   "url": "https://xlabcompany.github.io/duoclone/",
+   "name": "Duo Clone developer page",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   }
+  },
+  {
+   "@type": "MobileApplication",
+   "@id": "https://duoclone.com/#app",
+   "name": "Duo Clone",
+   "operatingSystem": "Android 6.0+",
+   "applicationCategory": "UtilitiesApplication",
+   "url": "https://duoclone.com/",
+   "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
+   "image": "https://xlabcompany.github.io/duoclone/assets/icon-512.png",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "sameAs": [
+    "https://github.com/XLABCOMPANY/duoclone"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://xlabcompany.github.io/duoclone/notes/push-notifications-in-app-clones/#article",
+   "headline": "Push notifications in app copies, including copies you have closed",
+   "description": "How Duo Clone 0.1.33 gets push messages to apps in copies, why a closed copy needs a foreground service, and how each notification shows which copy it is from.",
+   "datePublished": "2026-11-27",
+   "dateModified": "2026-11-27",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "image": "https://xlabcompany.github.io/duoclone/og/push-notifications-in-app-clones.png",
+   "mainEntityOfPage": "https://xlabcompany.github.io/duoclone/notes/push-notifications-in-app-clones/",
+   "isPartOf": {
+    "@id": "https://xlabcompany.github.io/duoclone/#website"
+   },
+   "about": {
+    "@id": "https://duoclone.com/#app"
+   },
+   "inLanguage": "en",
+   "wordCount": 1175
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://xlabcompany.github.io/duoclone/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Developer notes",
+     "item": "https://xlabcompany.github.io/duoclone/notes/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Push notifications in app copies, including copies you have closed",
+     "item": "https://xlabcompany.github.io/duoclone/notes/push-notifications-in-app-clones/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/icon-192.png" width="40" height="40" alt=""><span><b>Duo Clone</b><small>Developer page by XLAB</small></span></a>
+    <nav class="nav" aria-label="Main"><a href="../.././">Home</a><a href="../../notes/" aria-current="page">Notes</a><a href="../../changelog/">Changelog</a><a href="https://github.com/XLABCOMPANY/duoclone"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.84c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a></nav>
+  </div>
+</header>
+<main id="main">
+<article>
+<header class="art-head">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../../">Home</a></li><li><a href="../">Developer notes</a></li><li aria-current="page">Push notifications in app copies, including copies you have closed</li></ol></nav>
+      <h1>Push notifications in app copies, including copies you have closed</h1>
+      <p class="byline"><span>By <b><a href="https://xlabcompany.com/" rel="author">XLAB</a></b>, developer of Duo Clone</span><span class="dot"></span><time datetime="2026-11-27">27 November 2026</time><span class="dot"></span><span>6 min read</span></p>
+    </div>
+    <figure class="art-cover">
+      <img src="push-closed-clone.svg" width="1200" height="630" alt="A message from the cloud reaches a running copy and a closed copy, and ends as a notification tagged with the copy&#x27;s number" fetchpriority="high">
+      <figcaption>A running copy gets the message directly. A closed copy is started in the background so its app can post the notification.</figcaption>
+    </figure>
+  </div>
+</header>
+<div class="art-body">
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+  <p>On this page</p>
+  <ol><li><a href="#how-push-reaches-a-copy">How does a push message reach an app in a copy?</a></li><li><a href="#why-closed-copies-need-a-service">Why does a closed copy need a foreground service?</a></li><li><a href="#what-happens-to-a-closed-copy">What happens when a message arrives for a closed copy?</a></li><li><a href="#staying-alive">What keeps the connection alive after a restart or an update?</a></li><li><a href="#which-copy-is-it">How does a notification say which copy it is from?</a></li><li><a href="#scheduled-work">What about scheduled background work?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#how-push-reaches-a-copy">How does a push message reach an app in a copy?</a></li><li><a href="#why-closed-copies-need-a-service">Why does a closed copy need a foreground service?</a></li><li><a href="#what-happens-to-a-closed-copy">What happens when a message arrives for a closed copy?</a></li><li><a href="#staying-alive">What keeps the connection alive after a restart or an update?</a></li><li><a href="#which-copy-is-it">How does a notification say which copy it is from?</a></li><li><a href="#scheduled-work">What about scheduled background work?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol></details>
+</nav>
+    <div class="prose">
+<p class="answer"><strong>Duo Clone 0.1.33 delivers push messages to the apps in your copies, and with the opt-in setting "Notifications from closed clones" it does so even when a copy is closed, using a foreground service and one silent notification.</strong> The message goes to the copied app itself, which posts its own notification, and Duo Clone adds the copy's name and number to the title so you can tell two copies of the same app apart.</p>
+
+<p>This note explains how push works for an app that runs inside another app, why a closed copy needs a foreground service, what happens when the copy is locked, and how the scheduled background work of copied apps fits in.</p>
+
+<h2 id="how-push-reaches-a-copy">How does a push message reach an app in a copy?</h2>
+<p><strong>An app that uses Firebase Cloud Messaging receives each message in a service of its own, and in a copy that message has to be carried to the app by Duo Clone.</strong> Google's documentation describes the app side: the app extends <code>FirebaseMessagingService</code> and gets the message in <code>onMessageReceived</code>. On a normal install the phone's Google services hand the message over. Inside a copy, Duo Clone does that step, and it does not add a push server of its own: messages still travel through Google's push service, as they do for any app that uses it.</p>
+<p>While a copy is running, the message goes straight to the app in that copy. This is why version 0.1.33 lists "Apps in copies can now receive push messages while they run" as its own change. For a closed copy there is nothing to hand the message to, which is the harder case.</p>
+
+<h2 id="why-closed-copies-need-a-service">Why does a closed copy need a foreground service?</h2>
+<p><strong>Android lets an app hold a long-lived connection in the background only while it runs a foreground service with a visible notification, so receiving for closed copies means a persistent notification.</strong> Duo Clone keeps one connection for each Account while the setting is on. The notification is silent and reads "Receiving notifications for clones. Turn this off in Settings."</p>
+<p>The service uses the foreground service type <code>specialUse</code>. Android describes that type as covering "any valid foreground service use cases that aren't covered by the other foreground service types", and asks the developer to describe the use in a manifest property that is reviewed when the app is submitted. Messages for a closed copy do not fit playback, location or data transfer, so <code>specialUse</code> is the honest type. The <a href="../foreground-service-types-app-cloner/">note on foreground service types</a> covers how Duo Clone picks types for its other services.</p>
+<p>The setting is off by default, and the line under it in Settings is plain about the cost: "Keeps a silent notification so apps in clones get messages while closed. Uses some extra battery." If your phone slows down or the battery drains, <a href="https://duoclone.com/blog/cloned-apps-battery-ram/">what a second copy of an app costs in battery and memory</a> is covered in plain language on the Duo Clone website.</p>
+
+<h2 id="what-happens-to-a-closed-copy">What happens when a message arrives for a closed copy?</h2>
+<p><strong>Duo Clone starts the copy in the background, with no screen, passes the message to the app and lets the app post its own notification.</strong> The copy is then given a short time to finish, about a minute, and released if nothing else keeps it running. Google's FCM documentation is clear that <code>onMessageReceived</code> has "a short execution window" and that work which takes more than a few seconds must continue in a valid process lifecycle, so a copy that is released straight away would lose slow work.</p>
+<p>Two kinds of copy are skipped on purpose:</p>
+<ul>
+<li><strong>A locked copy.</strong> If the copy sits behind the Private Space lock, the message is not delivered while it is locked, so the content of a message cannot be read out of a notification before you unlock. This is a limit: Duo Clone makes no promise about a message that arrives while the copy is locked.</li>
+<li><strong>An app that opts out of cloners.</strong> Apps that ask not to run in a virtual space, with the manifest property described in the <a href="../require-secure-env/">REQUIRE_SECURE_ENV note</a>, are not started.</li>
+</ul>
+
+<h2 id="staying-alive">What keeps the connection alive after a restart or an update?</h2>
+<p><strong>When the setting is on, Duo Clone starts the service again after the phone boots and after Duo Clone itself is updated.</strong> An update stops a running service, and a reboot ends everything, so without this step notifications would stop silently until you opened the app. Android 15 forbids a <code>BOOT_COMPLETED</code> receiver from starting <code>dataSync</code>, <code>camera</code>, <code>mediaPlayback</code>, <code>phoneCall</code>, <code>mediaProjection</code> and <code>microphone</code> services. <code>specialUse</code> is not among them, so the push service may start at boot.</p>
+
+<h2 id="which-copy-is-it">How does a notification say which copy it is from?</h2>
+<p><strong>Duo Clone puts the copy's name and number before the notification title, for example "Chat #1 · Alex".</strong> The first version put this text in the notification's header line next to the app name. Some phone makers' interfaces do not show that header line for chat notifications, so the name moved into the title, the one text every notification shade shows. The name goes first because a long title is cut at the end. In a one-to-one chat the sender's name is the title, so the copy's name goes in front of the sender.</p>
+<p>The name is the one you gave the copy, or the app's name if you did not, followed by the copy number. Text the app sets itself is kept after the copy's name.</p>
+
+<h2 id="scheduled-work">What about scheduled background work?</h2>
+<p><strong>Version 0.1.33 also runs the scheduled jobs of apps in copies, which is how WorkManager, JobIntentService and periodic jobs keep apps in sync.</strong> Google recommends WorkManager for work that has to persist. Duo Clone schedules those jobs for real, one set per copy, and cancels them when you use Clear data or delete the copy. Jobs also end the way Android ends them, so an app that waits for its background work to finish no longer hangs when you log out.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If you build a container that runs other apps, receiving push messages is a separate feature from running them, and it needs its own consent, its own foreground service and its own rules for locked and opted-out apps.</strong> Make the always-on part opt-in, say what it costs, label every notification with the copy it belongs to, and choose the foreground service type that matches the work.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Duo Clone <a href="../../changelog/#v0-1-33">changelog, version 0.1.33</a> (21 November 2026): push messages in running copies, Notifications from closed clones, copy names in notifications, scheduled jobs.</li>
+<li>Firebase, <a href="https://firebase.google.com/docs/cloud-messaging/android/receive-messages">Receive messages in an Android app</a>: <code>FirebaseMessagingService</code>, <code>onMessageReceived</code> and its execution window (read 27 November 2026).</li>
+<li>Firebase, <a href="https://firebase.google.com/docs/cloud-messaging/android/message-priority">Set and manage Android message priority</a>: normal and high priority delivery in Doze (read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/develop/background-work/services/fgs/service-types">Foreground service types</a>: <code>specialUse</code> and its manifest property (last updated 16 November 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/about/versions/15/behavior-changes-15">Behavior changes: apps that target Android 15 or higher</a>: restrictions on <code>BOOT_COMPLETED</code> receivers launching foreground services (last updated 28 October 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/develop/background-work/background-tasks/persistent">Persistent work</a>: WorkManager (read 27 November 2026).</li>
+</ul>
+</section>
+
+    </div>
+  </div>
+</div>
+</article>
+<section class="section related" aria-labelledby="related-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="related-title">More developer notes</h2><a class="more" href="../">All notes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="notes-grid"><article class="note-card">
+  <div class="cover"><img src="../../notes/foreground-service-types-app-cloner/foreground-service-types.svg" width="1200" height="630" alt="Four service tiles with notification strips and labels: special use for keeping copies, special use for push, data sync for backup, and a pass-through tile" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/foreground-service-types-app-cloner/">Choosing honest foreground service types in an app cloner</a></h3>
+    <p>Why keeping copies alive is not data sync, which type each Duo Clone service declares, and how a copied app&#x27;s own foreground service gets the type it asks for.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/require-secure-env/secure-env-opt-out.svg" width="1200" height="630" alt="Android manifest sheet with the REQUIRE_SECURE_ENV line marked in pink, and an app card stopped at a dashed container border" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/require-secure-env/">REQUIRE_SECURE_ENV: how an Android app opts out of app cloners</a></h3>
+    <p>One manifest line tells app cloners on Google Play to leave your app alone. What it covers, how it differs from Play Integrity, and how Duo Clone honours it.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/chunked-backup-encryption/chunked-backup-chunks.svg" width="1200" height="630" alt="A backup file cut into six numbered chunks, each with its own lock, the last one flagged, and a stray out-of-place chunk crossed out" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/chunked-backup-encryption/">Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it</a></h3>
+    <p>Why one AES-GCM pass over a whole backup runs out of memory, and how encrypting in separately authenticated chunks fixed it without breaking old backup files.</p>
+  </div>
+</article></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</p>
+    <nav aria-label="Footer">
+      <a href="../../notes/">Developer notes</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
+      <a href="https://xlabcompany.com/">XLAB</a>
+    </nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+  var p=document.querySelector('[data-print]');
+  if(p&&'IntersectionObserver' in window){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){setTimeout(function(){p.classList.add('in')},120);o.disconnect();}})},{threshold:.4});o.observe(p);}else if(p){p.classList.add('in');}
+  var links=[].slice.call(document.querySelectorAll('.toc > ol a'));
+  if(links.length&&'IntersectionObserver' in window){
+    var map={};links.forEach(function(a){map[a.hash.slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on');}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=document.getElementById(id);if(h)io.observe(h);});
+  }
+})();
+</script>
+</body>
+</html>

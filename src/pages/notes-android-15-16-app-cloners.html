@@ -6,6 +6,7 @@
   "description": "Edge-to-edge with no opt-out, predictive back and stricter services: what Android 15 and 16 changed for app cloners, and what Duo Clone fixed in 0.1.19–0.1.24.",
   "card": "Edge-to-edge with no way out, predictive back, and the copy-specific bugs Duo Clone fixed on the newest Android versions, release by release.",
   "published": "2026-11-20",
+  "modified": "2026-11-27",
   "cover": "android-15-16-insets.svg",
   "coverAlt": "Phone outline with status and navigation bars, an older app card sliding under the bars in pink and sitting inside them in green, labelled API 35 and API 36",
   "caption": "Edge-to-edge is decided by target API level. A copy runs inside an app that targets a current one.",
@@ -49,7 +50,7 @@
 </tbody>
 </table>
 </div>
-<p>Several of these share one root: on recent versions, system services look more closely at which installed app a request comes from. In a copy, the app on screen and the app Android sees are not the same, so each such check is a place where the cloner has to keep the copy working without pretending to be something it is not.</p>
+<p>Several of these share one root: on recent versions, system services look more closely at which installed app a request comes from. In a copy, the app on screen and the app Android sees are not the same, so each such check is a place where the cloner has to keep the copy working without pretending to be something it is not. Later versions met the same root in <a href="../biometric-prompts-in-app-clones/">fingerprint and face prompts</a>, in <a href="../push-notifications-in-app-clones/">push notifications for closed copies</a> and in <a href="../foreground-service-types-app-cloner/">foreground service types</a>.</p>
 
 <h2 id="older-versions">Do the older Android versions still matter?</h2>
 <p><strong>Yes. Duo Clone runs copies on Android 6 through 16, and the oldest versions need their own fixes.</strong> In the same releases, 0.1.21 fixed connection errors on Android 6 and 7.0, and made camera clones on Android 9 and older save a photo and stay open instead of closing about ten seconds later.</p>

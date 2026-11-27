@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fingerprint and Face Prompts Inside an App Clone</title>
+<meta name="description" content="Why Android&#x27;s fingerprint and face prompt never appeared in an app copy, how Duo Clone 0.1.32 fixed it, and what stays with the system, passkeys included.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/biometric-prompts-in-app-clones/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fbfbf8">
+<meta name="author" content="XLAB">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Duo Clone developer page">
+<meta property="og:title" content="Fingerprint and Face Prompts Inside an App Clone">
+<meta property="og:description" content="Why Android&#x27;s fingerprint and face prompt never appeared in an app copy, how Duo Clone 0.1.32 fixed it, and what stays with the system, passkeys included.">
+<meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/biometric-prompts-in-app-clones/">
+<meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/biometric-prompts-in-app-clones.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A system fingerprint prompt over an app copy, with biometric data kept in a sealed system box and only a yes passing out">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fingerprint and Face Prompts Inside an App Clone">
+<meta name="twitter:description" content="Why Android&#x27;s fingerprint and face prompt never appeared in an app copy, how Duo Clone 0.1.32 fixed it, and what stays with the system, passkeys included.">
+<meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/biometric-prompts-in-app-clones.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/be-vietnam-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="sitemap" type="application/xml" href="https://xlabcompany.github.io/duoclone/sitemap.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://xlabcompany.com/#organization",
+   "name": "XLAB",
+   "url": "https://xlabcompany.com/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://xlabcompany.github.io/duoclone/#website",
+   "url": "https://xlabcompany.github.io/duoclone/",
+   "name": "Duo Clone developer page",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   }
+  },
+  {
+   "@type": "MobileApplication",
+   "@id": "https://duoclone.com/#app",
+   "name": "Duo Clone",
+   "operatingSystem": "Android 6.0+",
+   "applicationCategory": "UtilitiesApplication",
+   "url": "https://duoclone.com/",
+   "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
+   "image": "https://xlabcompany.github.io/duoclone/assets/icon-512.png",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "sameAs": [
+    "https://github.com/XLABCOMPANY/duoclone"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://xlabcompany.github.io/duoclone/notes/biometric-prompts-in-app-clones/#article",
+   "headline": "Fingerprint and face prompts inside an app copy: why they did not show and what changed",
+   "description": "Why Android's fingerprint and face prompt never appeared in an app copy, how Duo Clone 0.1.32 fixed it, and what stays with the system, passkeys included.",
+   "datePublished": "2026-11-27",
+   "dateModified": "2026-11-27",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "image": "https://xlabcompany.github.io/duoclone/og/biometric-prompts-in-app-clones.png",
+   "mainEntityOfPage": "https://xlabcompany.github.io/duoclone/notes/biometric-prompts-in-app-clones/",
+   "isPartOf": {
+    "@id": "https://xlabcompany.github.io/duoclone/#website"
+   },
+   "about": {
+    "@id": "https://duoclone.com/#app"
+   },
+   "inLanguage": "en",
+   "wordCount": 937
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://xlabcompany.github.io/duoclone/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Developer notes",
+     "item": "https://xlabcompany.github.io/duoclone/notes/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Fingerprint and face prompts inside an app copy: why they did not show and what changed",
+     "item": "https://xlabcompany.github.io/duoclone/notes/biometric-prompts-in-app-clones/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/icon-192.png" width="40" height="40" alt=""><span><b>Duo Clone</b><small>Developer page by XLAB</small></span></a>
+    <nav class="nav" aria-label="Main"><a href="../.././">Home</a><a href="../../notes/" aria-current="page">Notes</a><a href="../../changelog/">Changelog</a><a href="https://github.com/XLABCOMPANY/duoclone"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.84c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a></nav>
+  </div>
+</header>
+<main id="main">
+<article>
+<header class="art-head">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../../">Home</a></li><li><a href="../">Developer notes</a></li><li aria-current="page">Fingerprint and face prompts inside an app copy</li></ol></nav>
+      <h1>Fingerprint and face prompts inside an app copy: why they did not show and what changed</h1>
+      <p class="byline"><span>By <b><a href="https://xlabcompany.com/" rel="author">XLAB</a></b>, developer of Duo Clone</span><span class="dot"></span><time datetime="2026-11-27">27 November 2026</time><span class="dot"></span><span>5 min read</span></p>
+    </div>
+    <figure class="art-cover">
+      <img src="biometric-prompt-copy.svg" width="1200" height="630" alt="A system fingerprint prompt over an app copy, with biometric data kept in a sealed system box and only a yes passing out" fetchpriority="high">
+      <figcaption>The prompt, the sensor and the match belong to the system. The app only receives the answer.</figcaption>
+    </figure>
+  </div>
+</header>
+<div class="art-body">
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+  <p>On this page</p>
+  <ol><li><a href="#how-apps-ask">How does an app ask for a fingerprint or face?</a></li><li><a href="#why-it-failed">Why did the prompt never appear in a copy?</a></li><li><a href="#what-changed">What did Duo Clone change in 0.1.32?</a></li><li><a href="#what-stays-with-the-system">What stays with the system?</a></li><li><a href="#passwords-and-passkeys">What about saved passwords and passkeys?</a></li><li><a href="#limits">Where are the limits?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#how-apps-ask">How does an app ask for a fingerprint or face?</a></li><li><a href="#why-it-failed">Why did the prompt never appear in a copy?</a></li><li><a href="#what-changed">What did Duo Clone change in 0.1.32?</a></li><li><a href="#what-stays-with-the-system">What stays with the system?</a></li><li><a href="#passwords-and-passkeys">What about saved passwords and passkeys?</a></li><li><a href="#limits">Where are the limits?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol></details>
+</nav>
+    <div class="prose">
+<p class="answer"><strong>Since version 0.1.32, an app in a Duo Clone copy can show Android's fingerprint and face prompt, which never appeared before because Android checks the biometric permission against a user ID and a package name, and a copy's package does not belong to Duo Clone's user ID.</strong> Duo Clone now makes these requests under its own identity. The sensor, the prompt and the match stay with the system, and the app still receives only the result.</p>
+
+<p>This note explains how an app asks for a fingerprint or face, why that request failed inside a copy, what the fix changes and what it leaves alone, and where passwords and passkeys stand in a copy.</p>
+
+<h2 id="how-apps-ask">How does an app ask for a fingerprint or face?</h2>
+<p><strong>An app calls <code>BiometricPrompt</code>, the system shows its own dialog, and the app gets back a success, a failure or an error.</strong> Android's biometric guide describes the dialog as system-provided and "consistent across the apps that use it". The app never draws the prompt and never touches the sensor. It supplies a title and a callback, and the callback receives an authentication result.</p>
+<p>To use biometrics at all, the app declares the <code>USE_BIOMETRIC</code> permission, which Android's reference lists as a normal permission, added in API level 28. A normal permission is granted at install time, with no prompt to the user.</p>
+
+<h2 id="why-it-failed">Why did the prompt never appear in a copy?</h2>
+<p><strong>Android's biometric service checks that the calling app holds <code>USE_BIOMETRIC</code> by looking at the caller's user ID and package name together, and in a copy those two do not belong to each other.</strong> A copy runs inside Duo Clone, so it has Duo Clone's user ID, as the note on <a href="../how-app-copies-stay-separate/">how app copies stay separate</a> explains. The request, however, names the copied app's package, and that package is not installed under Duo Clone's user ID. Android rejects the pair with an error, and the prompt is never shown, so fingerprint sign-in looks broken even though the sensor works.</p>
+
+<h2 id="what-changed">What did Duo Clone change in 0.1.32?</h2>
+<p><strong>Duo Clone 0.1.32 sends the biometric request of a copy in a form the check accepts; the sensor, the prompt and the match stay with the system.</strong> The user ID and the package name now belong together, so the check passes and the system shows its normal dialog. The changelog states the result: "Fingerprint and face prompts now work inside copies of apps that use them. Before, the prompt never appeared in a copy."</p>
+<p>The fix covers fingerprint prompts and face prompts alike.</p>
+
+<h2 id="what-stays-with-the-system">What stays with the system?</h2>
+<p><strong>A copy gets the same thing a normal install gets, the result of the check, and not the fingerprint or face data behind it.</strong> For the stronger biometric classes, Android's biometric security documentation requires that raw biometric data and its derivatives, such as templates, "are never accessible from outside the secure isolated environment", such as the TEE or a Secure Element. The app receives the outcome, success or not, and nothing about the finger or the face.</p>
+<p>Two practical points follow. A copy uses the fingerprints and faces enrolled on the phone, so there is nothing to enrol again. And the biometric prompt is separate from Private Space, where Duo Clone's own lock hides copies behind a fingerprint or a PIN.</p>
+
+<h2 id="passwords-and-passkeys">What about saved passwords and passkeys?</h2>
+<p><strong>A password that an app offers to save in a copy is kept for that copy only, and passkeys do not work in copies.</strong> Both changes came in 0.1.33, in the area next to biometric sign-in.</p>
+<ul>
+<li><strong>Saved passwords.</strong> When an app in a copy saves a login, Duo Clone keeps it encrypted in that copy's own data. When the app asks for a login later, Duo Clone shows the prompt <em>Sign in with a saved login?</em> with the saved accounts. The entries live and die with the copy: Clear data and Delete remove them. They are not synced to a Google account.</li>
+<li><strong>Passkeys.</strong> Duo Clone answers a passkey request as unsupported, so the app can offer another way to sign in, and shows the notice <em>Passkeys don't work in clones. Use another way to sign in.</em> when you start one.</li>
+</ul>
+<p>Clearing the credential state also reports success now, so an app that waits for that answer no longer hangs when you log out.</p>
+
+<h2 id="limits">Where are the limits?</h2>
+<p><strong>The fix makes the system prompt available. It does not decide whether an app accepts a copy.</strong> Apps that ask not to run in a virtual space, using the manifest property in the <a href="../require-secure-env/">REQUIRE_SECURE_ENV note</a>, are still refused, and many banking and wallet apps are in that group. An app can also run its own checks on the device, and a copy may not pass them.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If your app fails biometric sign-in only inside a container, look at the permission check before the sensor: the check works on a user ID and a package name, and a host that gets them wrong makes a working sensor look broken.</strong> Whatever the cause, keep a fallback sign-in, because a prompt can be unavailable for reasons the app does not control.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Duo Clone <a href="../../changelog/#v0-1-32">changelog, version 0.1.32</a> (21 November 2026) and <a href="../../changelog/#v0-1-33">version 0.1.33</a>: fingerprint and face prompts, saved passwords, passkeys.</li>
+<li>Android Developers, <a href="https://developer.android.com/identity/sign-in/biometric-auth">Show a biometric authentication dialog</a>: the system dialog and the authentication callback (last updated 12 October 2026, read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/reference/android/Manifest.permission">Manifest.permission</a>: <code>USE_BIOMETRIC</code>, added in API level 28, protection level normal (read 27 November 2026).</li>
+<li>Android Open Source Project, <a href="https://source.android.com/docs/security/features/biometric">Biometric security</a>: biometric data and templates stay in the secure environment (last updated 30 September 2026, read 27 November 2026).</li>
+</ul>
+</section>
+
+    </div>
+  </div>
+</div>
+</article>
+<section class="section related" aria-labelledby="related-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="related-title">More developer notes</h2><a class="more" href="../">All notes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="notes-grid"><article class="note-card">
+  <div class="cover"><img src="../../notes/how-app-copies-stay-separate/copies-one-uid.svg" width="1200" height="630" alt="Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 7 min read</p>
+    <h3><a href="../../notes/how-app-copies-stay-separate/">How app copies stay separate, and where the limits are</a></h3>
+    <p>Android keeps apps apart with one user ID each. Copies in a cloner share one. What keeps them apart instead, where that stops, and how profiles compare.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/microg-in-an-app-cloner/microg-account-spaces.svg" width="1200" height="630" alt="Three Account spaces drawn as rounded frames, each holding app copies and one key for its sign-in, beside an Apache 2.0 licence sheet" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/microg-in-an-app-cloner/">Shipping microG inside an app cloner: licence, Accounts and limits</a></h3>
+    <p>Why an app cloner needs microG, what the Apache 2.0 licence asks of anyone who ships it, and how Duo Clone gives each Account its own Google sign-in.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/require-secure-env/secure-env-opt-out.svg" width="1200" height="630" alt="Android manifest sheet with the REQUIRE_SECURE_ENV line marked in pink, and an app card stopped at a dashed container border" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/require-secure-env/">REQUIRE_SECURE_ENV: how an Android app opts out of app cloners</a></h3>
+    <p>One manifest line tells app cloners on Google Play to leave your app alone. What it covers, how it differs from Play Integrity, and how Duo Clone honours it.</p>
+  </div>
+</article></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</p>
+    <nav aria-label="Footer">
+      <a href="../../notes/">Developer notes</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
+      <a href="https://xlabcompany.com/">XLAB</a>
+    </nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+  var p=document.querySelector('[data-print]');
+  if(p&&'IntersectionObserver' in window){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){setTimeout(function(){p.classList.add('in')},120);o.disconnect();}})},{threshold:.4});o.observe(p);}else if(p){p.classList.add('in');}
+  var links=[].slice.call(document.querySelectorAll('.toc > ol a'));
+  if(links.length&&'IntersectionObserver' in window){
+    var map={};links.forEach(function(a){map[a.hash.slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on');}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=document.getElementById(id);if(h)io.observe(h);});
+  }
+})();
+</script>
+</body>
+</html>

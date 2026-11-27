@@ -52,6 +52,11 @@ How an Android app cloner works underneath, written by the developer:
 - [How app copies stay separate, and where the limits are](https://xlabcompany.github.io/duoclone/notes/how-app-copies-stay-separate/)
 - [What Android 15 and 16 changed for app cloners](https://xlabcompany.github.io/duoclone/notes/android-15-16-app-cloners/)
 - [Shipping microG inside an app cloner: licence, Accounts and limits](https://xlabcompany.github.io/duoclone/notes/microg-in-an-app-cloner/)
+- [Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it](https://xlabcompany.github.io/duoclone/notes/chunked-backup-encryption/)
+- [Push notifications in app copies, including copies you have closed](https://xlabcompany.github.io/duoclone/notes/push-notifications-in-app-clones/)
+- [Choosing honest foreground service types in an app cloner](https://xlabcompany.github.io/duoclone/notes/foreground-service-types-app-cloner/)
+- [Fingerprint and face prompts inside an app copy: why they did not show and what changed](https://xlabcompany.github.io/duoclone/notes/biometric-prompts-in-app-clones/)
+- [Keeping the copy number in order next to right-to-left text](https://xlabcompany.github.io/duoclone/notes/copy-number-right-to-left-text/)
 
 ## Guides on duoclone.com
 

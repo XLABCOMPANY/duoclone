@@ -230,7 +230,7 @@ def note_card(n: dict, depth: int, variant: str = '', level: int = 3) -> str:
 
 def notes_grid(notes: list, depth: int, level: int = 3) -> str:
     variants = ['lead', '', '', 'wide']
-    cards = [note_card(n, depth, variants[i] if i < 4 else '', level) for i, n in enumerate(notes)]
+    cards = [note_card(n, depth, variants[i] if i < 4 else 'half', level) for i, n in enumerate(notes)]
     return '<div class="notes-grid">\n' + '\n'.join(cards) + '\n</div>'
 
 
@@ -259,17 +259,47 @@ def toc(body: str) -> str:
 def build():
     pages = {p.stem: load_page(p) for p in sorted((ROOT / 'src/pages').glob('*.html'))}
     releases = json.loads((ROOT / 'src/releases.json').read_text())
-    order = ['notes-require-secure-env', 'notes-how-app-copies-stay-separate', 'notes-android-15-16-app-cloners',
-             'notes-microg-in-an-app-cloner']
-    notes = [pages[k] for k in order]
+    # The four first notes keep their order and their related-notes links. Newer notes come first on the index.
+    old_order = ['notes-require-secure-env', 'notes-how-app-copies-stay-separate', 'notes-android-15-16-app-cloners',
+                 'notes-microg-in-an-app-cloner']
+    new_order = ['notes-chunked-backup-encryption', 'notes-push-notifications-in-app-clones',
+                 'notes-foreground-service-types-app-cloner', 'notes-biometric-prompts-in-app-clones',
+                 'notes-copy-number-right-to-left-text']
+    old_notes = [pages[k] for k in old_order]
+    notes = [pages[k] for k in new_order] + old_notes
+    by_slug = {n['path'].strip('/').split('/')[-1]: n for n in notes}
+    # Hand-picked related notes for the newer notes; the older ones keep "the first three others" among themselves.
+    related_slugs = {
+        'chunked-backup-encryption': ['foreground-service-types-app-cloner', 'how-app-copies-stay-separate', 'push-notifications-in-app-clones'],
+        'push-notifications-in-app-clones': ['foreground-service-types-app-cloner', 'require-secure-env', 'chunked-backup-encryption'],
+        'foreground-service-types-app-cloner': ['push-notifications-in-app-clones', 'chunked-backup-encryption', 'android-15-16-app-cloners'],
+        'biometric-prompts-in-app-clones': ['how-app-copies-stay-separate', 'microg-in-an-app-cloner', 'require-secure-env'],
+        'copy-number-right-to-left-text': ['android-15-16-app-cloners', 'push-notifications-in-app-clones', 'how-app-copies-stay-separate'],
+    }
     latest = releases[0]
     built = []
+
+    def new_notes_line() -> str:
+        anchors = {
+            'chunked-backup-encryption': 'how large backups are encrypted in chunks',
+            'push-notifications-in-app-clones': 'push notifications for closed copies',
+            'foreground-service-types-app-cloner': 'the foreground service types Duo Clone declares',
+            'biometric-prompts-in-app-clones': 'fingerprint and face prompts in copies',
+            'copy-number-right-to-left-text': 'keeping the copy number in order next to Arabic text',
+        }
+        links = [f'<a href="notes/{s}/">{a}</a>' for s, a in anchors.items()]
+        return ('<p style="margin-top:2rem;max-width:62ch">Newer notes cover ' + ', '.join(links[:-1])
+                + ' and ' + links[-1] + '.</p>')
 
     # Notes
     for n in notes:
         depth = n['path'].count('/')
         words = word_count(n['body'])
-        others = [o for o in notes if o is not n][:3]
+        slug_ = n['path'].strip('/').split('/')[-1]
+        if slug_ in related_slugs:
+            others = [by_slug[s] for s in related_slugs[slug_]]
+        else:
+            others = [o for o in old_notes if o is not n][:3]
         related = '<div class="notes-grid">' + ''.join(note_card(o, depth) for o in others) + '</div>'
         body = f'''<article>
 <header class="art-head">
@@ -314,7 +344,7 @@ def build():
 
     # Notes index
     idx = {'path': 'notes/', 'source': 'generated', 'title': 'Duo Clone Developer Notes: Android Rules and Limits',
-           'description': 'Developer notes from XLAB, maker of Duo Clone: the Android rules a container follows, where copies stop being separate, microG and what Android 16 changed.'}
+           'description': 'Developer notes from XLAB, maker of Duo Clone: Android rules a container follows, copy separation, microG, Android 16, backups, push, foreground services.'}
     body = f'''<section class="list-head">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../">Home</a></li><li aria-current="page">Developer notes</li></ol></nav>
@@ -332,7 +362,7 @@ def build():
             {'@type': 'ListItem', 'position': i + 1, 'url': SITE + n['path'], 'name': n['h1']} for i, n in enumerate(notes)]}},
         crumbs([('Home', ''), ('Developer notes', 'notes/')])]
     write('notes/', page(idx, body, 1, graph, 'notes.png', 'notes/'))
-    built.append(('notes/', max(n['published'] for n in notes), 0))
+    built.append(('notes/', max(n.get('modified', n['published']) for n in notes), 0))
 
     # Changelog
     rel_html = []
@@ -365,7 +395,8 @@ def build():
 
     # Home
     home = pages['home']
-    body = fill_tokens(home['body'], {'NOTES_GRID': notes_grid(notes, 0), 'RELEASE_STRIP': release_strip(latest),
+    body = fill_tokens(home['body'], {'NOTES_GRID': notes_grid(old_notes, 0), 'NEW_NOTES': new_notes_line(),
+                                      'RELEASE_STRIP': release_strip(latest),
                                       'LATEST_VERSION': latest['version']})
     graph = [org(), website(), app(), {'@type': 'WebPage', '@id': SITE + '#page', 'url': SITE, 'name': home['title'],
              'isPartOf': {'@id': WEBSITE_ID}, 'about': {'@id': APP_ID}, 'primaryImageOfPage': SITE + 'assets/icon-512.png',

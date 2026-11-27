@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chunked AES-GCM Backups for Large App Clone Data</title>
+<meta name="description" content="Duo Clone 0.1.37 encrypts backups in AES-GCM chunks, so a copy with hundreds of megabytes backs up and restores, and a damaged or cut-off file is rejected.">
+<link rel="canonical" href="https://xlabcompany.github.io/duoclone/notes/chunked-backup-encryption/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fbfbf8">
+<meta name="author" content="XLAB">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Duo Clone developer page">
+<meta property="og:title" content="Chunked AES-GCM Backups for Large App Clone Data">
+<meta property="og:description" content="Duo Clone 0.1.37 encrypts backups in AES-GCM chunks, so a copy with hundreds of megabytes backs up and restores, and a damaged or cut-off file is rejected.">
+<meta property="og:url" content="https://xlabcompany.github.io/duoclone/notes/chunked-backup-encryption/">
+<meta property="og:image" content="https://xlabcompany.github.io/duoclone/og/chunked-backup-encryption.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A backup file cut into six numbered chunks, each with its own lock, the last one flagged, and a stray out-of-place chunk crossed out">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Chunked AES-GCM Backups for Large App Clone Data">
+<meta name="twitter:description" content="Duo Clone 0.1.37 encrypts backups in AES-GCM chunks, so a copy with hundreds of megabytes backs up and restores, and a damaged or cut-off file is rejected.">
+<meta name="twitter:image" content="https://xlabcompany.github.io/duoclone/og/chunked-backup-encryption.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/be-vietnam-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="sitemap" type="application/xml" href="https://xlabcompany.github.io/duoclone/sitemap.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://xlabcompany.com/#organization",
+   "name": "XLAB",
+   "url": "https://xlabcompany.com/"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://xlabcompany.github.io/duoclone/#website",
+   "url": "https://xlabcompany.github.io/duoclone/",
+   "name": "Duo Clone developer page",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   }
+  },
+  {
+   "@type": "MobileApplication",
+   "@id": "https://duoclone.com/#app",
+   "name": "Duo Clone",
+   "operatingSystem": "Android 6.0+",
+   "applicationCategory": "UtilitiesApplication",
+   "url": "https://duoclone.com/",
+   "description": "An Android app cloner for running multiple accounts of the same app on one phone.",
+   "image": "https://xlabcompany.github.io/duoclone/assets/icon-512.png",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "sameAs": [
+    "https://github.com/XLABCOMPANY/duoclone"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://xlabcompany.github.io/duoclone/notes/chunked-backup-encryption/#article",
+   "headline": "Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it",
+   "description": "Duo Clone 0.1.37 encrypts backups in AES-GCM chunks, so a copy with hundreds of megabytes backs up and restores, and a damaged or cut-off file is rejected.",
+   "datePublished": "2026-11-27",
+   "dateModified": "2026-11-27",
+   "author": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "publisher": {
+    "@id": "https://xlabcompany.com/#organization"
+   },
+   "image": "https://xlabcompany.github.io/duoclone/og/chunked-backup-encryption.png",
+   "mainEntityOfPage": "https://xlabcompany.github.io/duoclone/notes/chunked-backup-encryption/",
+   "isPartOf": {
+    "@id": "https://xlabcompany.github.io/duoclone/#website"
+   },
+   "about": {
+    "@id": "https://duoclone.com/#app"
+   },
+   "inLanguage": "en",
+   "wordCount": 1070
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://xlabcompany.github.io/duoclone/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Developer notes",
+     "item": "https://xlabcompany.github.io/duoclone/notes/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it",
+     "item": "https://xlabcompany.github.io/duoclone/notes/chunked-backup-encryption/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/icon-192.png" width="40" height="40" alt=""><span><b>Duo Clone</b><small>Developer page by XLAB</small></span></a>
+    <nav class="nav" aria-label="Main"><a href="../.././">Home</a><a href="../../notes/" aria-current="page">Notes</a><a href="../../changelog/">Changelog</a><a href="https://github.com/XLABCOMPANY/duoclone"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.84c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a></nav>
+  </div>
+</header>
+<main id="main">
+<article>
+<header class="art-head">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../../">Home</a></li><li><a href="../">Developer notes</a></li><li aria-current="page">Chunked backup encryption</li></ol></nav>
+      <h1>Chunked backup encryption: why large clone backups failed and how Duo Clone fixed it</h1>
+      <p class="byline"><span>By <b><a href="https://xlabcompany.com/" rel="author">XLAB</a></b>, developer of Duo Clone</span><span class="dot"></span><time datetime="2026-11-27">27 November 2026</time><span class="dot"></span><span>6 min read</span></p>
+    </div>
+    <figure class="art-cover">
+      <img src="chunked-backup-chunks.svg" width="1200" height="630" alt="A backup file cut into six numbered chunks, each with its own lock, the last one flagged, and a stray out-of-place chunk crossed out" fetchpriority="high">
+      <figcaption>Each chunk carries its own seal and its place in the file. A chunk out of order does not open.</figcaption>
+    </figure>
+  </div>
+</header>
+<div class="art-body">
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+  <p>On this page</p>
+  <ol><li><a href="#why-large-backups-failed">Why did large backups fail?</a></li><li><a href="#what-is-a-chunked-backup">What is a chunked backup?</a></li><li><a href="#what-the-design-must-keep">Which properties must a chunked design keep?</a></li><li><a href="#what-else-changed">What else changed in backup and restore?</a></li><li><a href="#what-it-does-not-do">What does a backup not protect against?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol>
+  <details><summary>On this page</summary><ol><li><a href="#why-large-backups-failed">Why did large backups fail?</a></li><li><a href="#what-is-a-chunked-backup">What is a chunked backup?</a></li><li><a href="#what-the-design-must-keep">Which properties must a chunked design keep?</a></li><li><a href="#what-else-changed">What else changed in backup and restore?</a></li><li><a href="#what-it-does-not-do">What does a backup not protect against?</a></li><li><a href="#for-developers">What should other developers take from this?</a></li></ol></details>
+</nav>
+    <div class="prose">
+<p class="answer"><strong>Duo Clone 0.1.37 writes a backup as a series of AES-GCM chunks that are each sealed and verified on their own, instead of one encryption pass over the whole file, so a copy with hundreds of megabytes of data now backs up without running out of memory.</strong> Backup files from earlier versions still restore. Every chunk is tied to its position and to a last-chunk flag, so a reordered, truncated or extended backup is rejected.</p>
+
+<p>This note explains why a single GCM pass fails on large data, how chunking fixes it, which properties the chunked design must keep, and what changed around it in backup and restore.</p>
+
+<h2 id="why-large-backups-failed">Why did large backups fail?</h2>
+<p><strong>A backup is the copy's data zipped and encrypted with AES-256-GCM, and encrypting the whole file in one pass made Android's crypto provider hold all of the data in memory until the final call.</strong> GCM is an authenticated mode: it produces ciphertext plus a tag, and the tag is checked when the file is decrypted. Google's <code>Cipher</code> reference describes the tag as appended to the ciphertext on encryption and verified on decryption, and its Cryptography guide recommends AES-GCM with 256-bit keys when you are free to choose.</p>
+<p>On Android the provider behind <code>AES/GCM/NoPadding</code> is Conscrypt. Its AEAD cipher holds the whole input in memory until <code>doFinal</code> returns. A copy of a few hundred megabytes could therefore fail to back up, and that size is easy to reach for a chat app with a media cache. The failure was a memory limit of the one-pass design, not a problem with the key or the password.</p>
+
+<h2 id="what-is-a-chunked-backup">What is a chunked backup?</h2>
+<p><strong>A chunked backup cuts the stream into fixed-size pieces of about 1 MiB, seals each piece with AES-GCM on its own, and writes it out before starting the next.</strong> Only one chunk is in memory at a time, so memory use no longer grows with the size of the copy. Restore works the same way in reverse: it reads a chunk, checks its tag and only then writes the plaintext out.</p>
+<p>The idea is not new. Google's Tink library describes it as streaming authenticated encryption: it is useful "when the data to be encrypted is too large to be processed in a single step", and encryption "is done in segments, which are bound to their location within a ciphertext and cannot be removed or reordered". Tink's recommended variant also uses 1 MB segments.</p>
+
+<h2 id="what-the-design-must-keep">Which properties must a chunked design keep?</h2>
+<p><strong>Splitting a file into chunks creates three new ways to go wrong: a repeated nonce, a missing position, and a missing end. The design closes each one.</strong></p>
+<ol>
+<li><strong>No nonce is used twice under one key.</strong> The <code>Cipher</code> reference states that GCM has a uniqueness requirement on IVs for a given key, and that repeating them makes encryption subject to forgery attacks. Each backup file gets its own random value, and every chunk adds its own chunk number, so no two chunks share a nonce.</li>
+<li><strong>Each chunk authenticates its place.</strong> The associated data of every chunk includes the chunk number, so a chunk moved to another position fails its tag check.</li>
+<li><strong>The end is authenticated.</strong> The associated data carries a flag that is set only on the last chunk. A file cut short is missing the flagged chunk and is rejected as truncated, and data added after the flagged chunk is rejected as trailing data.</li>
+</ol>
+<p>Associated data is the part of GCM made for this. It is authenticated but not encrypted, and NIST's GCM specification, SP 800-38D, defines the mode and its inputs. The <code>Cipher</code> reference adds one practical rule: supply all associated data before the ciphertext, so the provider does not have to buffer.</p>
+<p>The result is that a damaged backup stops the restore at the first bad chunk, and a wrong password fails at the first chunk too, without reading the rest of the file.</p>
+
+<h2 id="what-else-changed">What else changed in backup and restore?</h2>
+<p><strong>Three smaller changes shipped in the same version, all visible in the changelog.</strong></p>
+<ul>
+<li>Restore reads the file straight from where you saved it, instead of first copying it into an encrypted temporary file on the phone. A restore therefore needs less free space.</li>
+<li>When the phone or the folder you picked is out of space, the app says <em>Not enough free storage for the backup. Free some space on the phone or the destination and try again.</em> Before, this case showed a generic storage error.</li>
+<li>The limit on how much data a restore will unpack was raised, so large copies are not refused as oversized.</li>
+</ul>
+<p>Backups made by earlier versions still restore. A backup written by 0.1.37 or later is meant for 0.1.37 or later, so update before you restore one on another phone. If you only want the steps for making and restoring a backup in the app, <a href="https://duoclone.com/blog/backup-restore-cloned-app/">a plain-language walk-through of backing up a cloned app</a> is on the Duo Clone website.</p>
+
+<h2 id="what-it-does-not-do">What does a backup not protect against?</h2>
+<p><strong>Encryption keeps the file private and detects tampering, but it cannot recover a forgotten password, and it protects the file only, not the phone it was made on.</strong> The app warns about both before it writes anything: the backup holds the signed-in account and personal data of the copy, and "if you forget this password, the backup cannot be restored." Keep the file somewhere safe and do not share it.</p>
+
+<h2 id="for-developers">What should other developers take from this?</h2>
+<p><strong>If you encrypt large files with AES-GCM on Android, do not wrap the whole file in one cipher call: encrypt in chunks, bind the chunk number and a last-chunk flag into the associated data, and never reuse a nonce.</strong> Test with data much larger than your heap allows, because a design that works on a 5 MB file can fail on a 500 MB one. If you can take a dependency, start from Tink's Streaming AEAD, which already implements the segment scheme and documents its limits.</p>
+
+<section class="sources sheet" aria-labelledby="sources">
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Duo Clone <a href="../../changelog/#v0-1-37">changelog, version 0.1.37</a> (25 November 2026): backups in pieces, restore from the saved file, out-of-space message.</li>
+<li>Android Developers, <a href="https://developer.android.com/reference/javax/crypto/Cipher">javax.crypto.Cipher</a>: authenticated encryption, associated data and the GCM IV uniqueness requirement (read 27 November 2026).</li>
+<li>Android Developers, <a href="https://developer.android.com/privacy-and-security/cryptography">Cryptography</a>: recommended algorithms, AES/GCM/NoPadding with 256-bit keys (read 27 November 2026).</li>
+<li>Google for Developers, <a href="https://developers.google.com/tink/streaming-aead">Tink: Streaming Authenticated Encryption with Associated Data</a> (read 27 November 2026).</li>
+<li>NIST, <a href="https://csrc.nist.gov/pubs/sp/800/38/d/final">SP 800-38D, Galois/Counter Mode (GCM) and GMAC</a>, November 2007 (read 27 November 2026).</li>
+</ul>
+</section>
+
+    </div>
+  </div>
+</div>
+</article>
+<section class="section related" aria-labelledby="related-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="related-title">More developer notes</h2><a class="more" href="../">All notes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="notes-grid"><article class="note-card">
+  <div class="cover"><img src="../../notes/foreground-service-types-app-cloner/foreground-service-types.svg" width="1200" height="630" alt="Four service tiles with notification strips and labels: special use for keeping copies, special use for push, data sync for backup, and a pass-through tile" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/foreground-service-types-app-cloner/">Choosing honest foreground service types in an app cloner</a></h3>
+    <p>Why keeping copies alive is not data sync, which type each Duo Clone service declares, and how a copied app&#x27;s own foreground service gets the type it asks for.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/how-app-copies-stay-separate/copies-one-uid.svg" width="1200" height="630" alt="Two app copies inside one rounded frame labelled one UID with a dashed partition, beside two separate frames for a main user and a profile" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-20">20 November 2026</time> · 7 min read</p>
+    <h3><a href="../../notes/how-app-copies-stay-separate/">How app copies stay separate, and where the limits are</a></h3>
+    <p>Android keeps apps apart with one user ID each. Copies in a cloner share one. What keeps them apart instead, where that stops, and how profiles compare.</p>
+  </div>
+</article><article class="note-card">
+  <div class="cover"><img src="../../notes/push-notifications-in-app-clones/push-closed-clone.svg" width="1200" height="630" alt="A message from the cloud reaches a running copy and a closed copy, and ends as a notification tagged with the copy&#x27;s number" loading="lazy" decoding="async"></div>
+  <div>
+    <p class="meta"><time datetime="2026-11-27">27 November 2026</time> · 6 min read</p>
+    <h3><a href="../../notes/push-notifications-in-app-clones/">Push notifications in app copies, including copies you have closed</a></h3>
+    <p>How push messages reach an app that runs inside a cloner, why a closed copy needs an opt-in foreground service, and how notifications name the copy they belong to.</p>
+  </div>
+</article></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <p>© 2026 XLAB. Duo Clone is not affiliated with any app it can clone.</p>
+    <nav aria-label="Footer">
+      <a href="../../notes/">Developer notes</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="https://github.com/XLABCOMPANY/duoclone">GitHub</a>
+      <a href="https://xlabcompany.com/">XLAB</a>
+    </nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+  var p=document.querySelector('[data-print]');
+  if(p&&'IntersectionObserver' in window){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){setTimeout(function(){p.classList.add('in')},120);o.disconnect();}})},{threshold:.4});o.observe(p);}else if(p){p.classList.add('in');}
+  var links=[].slice.call(document.querySelectorAll('.toc > ol a'));
+  if(links.length&&'IntersectionObserver' in window){
+    var map={};links.forEach(function(a){map[a.hash.slice(1)]=a;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on');}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=document.getElementById(id);if(h)io.observe(h);});
+  }
+})();
+</script>
+</body>
+</html>
